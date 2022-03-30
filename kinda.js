@@ -331,7 +331,8 @@ function kinda(selector, initialState = {
     style: style.bind(null, selector),
     on: on1.bind(null, selector),
     write: write.bind(null, selector),
-    slug: selector,
+    selector: selector,
+    initialState
   };
 }
 import('https://esm.sh/fast-equals@2.0.4').then(({ deepEqual  })=>equal = deepEqual

@@ -17,8 +17,8 @@
     <highlighter color="orange">rendering</highlighter>,
     <highlighter color="rebeccapurple">scoped styles</highlighter>,
     <highlighter color="lime">event delegation</highlighter>,
-    <highlighter color="dodgerblue">state management</highlighter>,
-    and <strong> super easy!!!</strong>.
+    and
+    <highlighter color="dodgerblue">state management</highlighter> <strong> super easy!!!</strong>.
     </p>
 
     <hr />
@@ -26,11 +26,12 @@
     <h2>Quick Start</h2>
     <p>
     </p>
-    <pre><xmp><span class="hello"></span>
-<script>
-  import kinda from './kinda.js'
+    <xmp class="z-monospace"><span class="hello"></span>
+
+<script type="module">
+  import kinda from '/kinda.js'
   kinda('.hello').render(() => 'World!')
-</script></xmp></pre>
+</script></xmp>
 
     <h2>Documentation</h2>
     <p>
@@ -71,6 +72,7 @@
       </dd>
     </dl>
 
+    <script type="module" src="./monospace.js"></script>
     <script type="module">
       import kinda from './kinda.js'
       const highlighter = kinda('highlighter')
