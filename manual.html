@@ -4,13 +4,12 @@
     <meta charset="utf-8">
     <title>Kinda Documentation</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="./totally.css" rel="stylesheet" />
   </head>
 
   <body>
     <center>
-      <h1><code>&lt;kinda&gt;</code></h1>
-      <p>
-      </p>
+      <h1><code>kinda.js</code></h1>
     </center>
 
     <p style="font-size: 1.5em">
@@ -27,7 +26,7 @@
     <h2>Quick Start</h2>
     <p>
     </p>
-    <pre><xmp><text class="hello"></text>
+    <pre><xmp><span class="hello"></span>
 <script>
   import kinda from './kinda.js'
   kinda('.hello').render(() => 'World!')
@@ -39,7 +38,7 @@
       <strong>kinda(selector: string [, state: object]) : object</strong>
     </code>
     <p>
-    Creates an observable collection of tagged HTML nodes and exposes helper functions to manipulate them. Requires a selector: a CSS selector. An optional second argument may be passed for seeding the initial state.
+    Creates an observable collection of tagged HTML nodes and exposes helper functions to manipulate them. Requires a selector: a CSS selector. An optional second argument may set the initial state.
     </p>
     <p>
     It will return an object with the selector as an attribute and the following namespaced functions.
@@ -120,7 +119,6 @@
           .map(x => `${x}${suffix}`)
           .join(' ')
       }
-
     </script>
   </body>
 </html>

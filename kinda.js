@@ -187,7 +187,6 @@ function listen(type, selector, handler, scope) {
 }
 const observableEvents = [
   'render',
-  'mount'
 ];
 function on(type, selector, handler) {
   const unbind = listen(type, selector, handler, this);
@@ -247,12 +246,6 @@ const dom = (target, html)=>{
     target.innerHTML = html;
   }
 };
-function mount(selector, callback) {
-  ion.on('mount', selector, (event)=>{
-    console.log(event.target.id);
-    callback(event.target);
-  });
-}
 async function render1(selector, callback, dependencies = []) {
   ion.on('render', selector, (event)=>{
     const id = [
