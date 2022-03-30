@@ -10,17 +10,17 @@
 
     <link href="./totally.css" rel="stylesheet" />
     <style type="text/css">
-			hr {
-				background: green;
-			}
+      hr {
+        background: green;
+      }
 
-			a:link {
-				color: white !important;
-			}
+      a:link {
+        color: white !important;
+      }
 
-			a:visited {
-				color: orange !important;
-			}
+      a:visited {
+        color: orange !important;
+      }
 
       audio {
         display: block;
@@ -34,7 +34,7 @@
   </head>
 
   <body>
-    <div class="z-404" id="index"></div>
+    <div class="z-404"></div>
 
     <audio src="2022-03-07-manuscript-lite.mp3" preload="auto" controls="controls" loop="true" type="audio/mp3">
       Your browser doesn't support the <code>audio</code> element.
@@ -46,30 +46,9 @@
       import './instrument.js'
 
       const path = window.location.pathname
-      const hostname = window.location.hostname
-
-      const ENV = {
-        PROD: 'production',
-        DEV: 'development',
-        SAFE: 'safe'
-      }
-
-      const env = {
-        prod: 'production',
-        dev: 'development',
-        SAFE: 'safe'
-      }
-
-      const environments = {
-        "": ENV.SAFE,
-        "localhost": ENV.DEV,
-      }
 
       const flags = {
-        mode: environments[hostname] || ENV.PROD,
-
-        path: path.split('/').slice(0, -1).join('/'),
-        syncInterval: 30000 // every 30 seconds
+        path,
       }
 
       const emptyEditor = {
@@ -94,36 +73,31 @@
       }
 
       function initialize(target, $, flags) {
-        const { id } = target
-        const { delta, rawHTML, mode } = editorById(id)
+        const { delta, rawHTML, mode } = editorById(flags.path)
 
         if(mode === 'view') {
           return rawHTML
         }
 
-        editor(target, delta)
-				target.editor.focus()
+        editor(target, delta, flags.path)
+        target.editor.focus()
       }
 
-      function editor(target, delta) {
+      function editor(target, delta, id) {
         if(! target.editor) {
           const container = document.createElement('div')
           target.appendChild(container)
 
           target.editor = new Quill(container, { theme: 'bubble' })
           target.editor.setContents(delta)
-          target.editor.on('editor-change', update(target))
+          target.editor.on('editor-change', update(target, id))
         }
       }
 
-      function update(target) {
-        const { id } = target
-
+      function update(target, id) {
         return function updateEditor() {
           const delta = target.editor.getContents()
           const rawHTML = target.editor.root.innerHTML
-
-					console.log(rawHTML)
 
           $.write({
             [id]: { delta, rawHTML }
@@ -137,60 +111,60 @@
 
       function berkeley($, flags) {
         $.style(`
-					& {
-						display: block;
+          & {
+            display: block;
             font-family: 'BerkeleyMono';
-					}
+          }
           & .ql-toolbar.ql-bubble,
           & .ql-container.ql-bubble,
           & .ql-toolbar.ql-snow,
           & .ql-container.ql-snow {
             font-family: 'BerkeleyMono';
-						font-weight: 100;
-					}
-					& .ql-header {
-						position: relative;
-					}
+            font-weight: 100;
+          }
+          & .ql-header {
+            position: relative;
+          }
         `)
       }
     </script>
-		<style>
-			/* scanlines */
-			html::after {
-				content: " ";
-				display: block;
-				position: fixed;
-				top: 0;
-				left: 0;
-				bottom: 0;
-				right: 0;
-				background: rgba(18, 16, 16, 0.1);
-				opacity: 0;
-				z-index: 2;
-				pointer-events: none;
-			}
-			html::before {
-				content: " ";
-				display: block;
-				position: fixed;
-				top: 0;
-				left: 0;
-				bottom: 0;
-				right: 0;
-				background:
-					linear-gradient(
-						rgba(255, 255, 255, .1) 50%,
-						rgba(0, 0, 0, 0) 50%
-					),
-					linear-gradient(90deg,
-						rgba(255, 0, 0, 0.06),
-						rgba(0, 255, 0, 0.02),
-						rgba(0, 0, 255, 0.06)
-					);
-				z-index: 2;
-				background-size: 100% 2px, 3px 100%;
-				pointer-events: none;
-			}
+    <style>
+/* scanlines */
+html::after {
+  content: " ";
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(18, 16, 16, 0.1);
+  opacity: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+      html::before {
+        content: " ";
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background:
+          linear-gradient(
+          rgba(255, 255, 255, .1) 50%,
+          rgba(0, 0, 0, 0) 50%
+          ),
+        linear-gradient(90deg,
+          rgba(255, 0, 0, 0.06),
+          rgba(0, 255, 0, 0.02),
+          rgba(0, 0, 255, 0.06)
+          );
+        z-index: 2;
+        background-size: 100% 2px, 3px 100%;
+        pointer-events: none;
+      }
     </style>
   </body>
 </html>
