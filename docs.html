@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <title>Kinda Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+
+  <body>
+    <center>
+      <h1><code>&lt;kinda&gt;</code></h1>
+      <p>
+      </p>
+    </center>
+
+    <p style="font-size: 1.5em">
+    <strong>Kinda makes programming challenges like</strong>
+    <highlighter color="orange">rendering</highlighter>,
+    <highlighter color="rebeccapurple">scoped styles</highlighter>,
+    <highlighter color="lime">event delegation</highlighter>,
+    <highlighter color="dodgerblue">state management</highlighter>,
+    and <strong> super easy!!!</strong>.
+    </p>
+
+    <hr />
+
+    <h2>Quick Start</h2>
+    <p>
+    </p>
+    <pre><xmp><text class="hello"></text>
+<script>
+  import kinda from './kinda.js'
+  kinda('.hello').render(() => 'World!')
+</script></xmp></pre>
+
+    <h2>Documentation</h2>
+    <p>
+    <code>
+      <strong>kinda(selector: string [, state: object]) : object</strong>
+    </code>
+    <p>
+    Creates an observable collection of tagged HTML nodes and exposes helper functions to manipulate them. Requires a selector: a CSS selector. An optional second argument may be passed for seeding the initial state.
+    </p>
+    <p>
+    It will return an object with the selector as an attribute and the following namespaced functions.
+    </p>
+    </p>
+    <dl>
+      <dt><code>render(function(target: EventTarget))</code></dt>
+      <dd>
+      Expects a function that returns HTML as a string to be rendered into the provided target. A falsey return will leave the target node untouched. This function will be invoked whenever state changes.
+      </dd>
+      <dt><code>style(stylesheet: string)</code></dt>
+      <dd>
+      Expects a CSS stylesheet as a string. The ampersand (&amp;) symbol may be used to scope rulesets.
+      </dd>
+      <dt><code>on(eventType, selector, function(event)) : function</code></dt>
+      <dd>
+      An event delegator that expects three arguments. A css selector, and a handler. No selector will listen on the tag's root. Returns a function to remove the listener when invoked.
+      </dd>
+      <dt><code>read() : object</code></dt>
+      <dd>
+      Returns the current state.
+      </dd>
+      <dt><code>write(payload [, function(state, payload)])</code></dt>
+      <dd>
+      Merges the payload into the current state. An optional second argument for managing the state update may be provided. That function will be called with the current state and the payload. It expects the reconciled, complete state to be returned
+      </dd>
+      <dt><code>ready(function()) : void</code></dt>
+      <dd>
+      The provided callback will be invoked when the tag is ready: once data has been restored from the database.
+      </dd>
+    </dl>
+
+    <script type="module">
+      import kinda from './kinda.js'
+      const highlighter = kinda('highlighter')
+
+      const defaultColor = 'yellow'
+
+      highlighter.render((target) => {
+        const color = target.getAttribute('color') || defaultColor
+
+        if(!target.css) {
+          target.css = `
+            &[color="${color}"]::before {
+              background: ${color};
+              border-radius: ${n(4, 0, 100, 'px')};
+              content: '';
+              inset: ${n(4, -.75, .1, 'rem')};
+              position: absolute;
+              opacity: ${n(1, .2, .35)};
+              transform: rotate(${n(1, -7, 7, 'deg')}) scale(${n(1, .95, 1.1)});
+            }
+          `
+          highlighter.style(target.css)
+          target.html = `<span>${target.innerHTML}</span>`
+        }
+
+        return target.html
+      })
+
+      highlighter.style(`
+        & {
+          display: inline-block;
+          position: relative;
+          z-index: 1;
+          white-space: nowrap;
+        }
+
+        & span {
+          position: relative;
+          z-index: 1;
+        }
+      `)
+
+      function n(times = 1, min = 0, max = 1, suffix = '') {
+        return [...new Array(times)]
+          .map(() => Math.random() * (max - min) + min)
+          .map(x => `${x}${suffix}`)
+          .join(' ')
+      }
+
+    </script>
+  </body>
+</html>
