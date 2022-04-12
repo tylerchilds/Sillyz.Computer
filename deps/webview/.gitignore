@@ -1,0 +1,10 @@
+# ide
+.idea
+.vscode
+
+# rust build
+target/
+
+# plugin cache
+.deno_plugins/
+WebView2Loader.dll

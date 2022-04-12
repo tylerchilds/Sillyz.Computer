@@ -1,4 +1,4 @@
-import { Webview } from "../webview_deno/mod.ts";
+import { Webview } from "./deps/webview/mod.ts";
 
 const webview = new Webview();
 
