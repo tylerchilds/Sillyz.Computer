@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Lesson 1</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://www.cutestrap.com/css/hotlinks/cutestrap.min.css?bustamove=201909230" rel="stylesheet" />
+  </head>
+  <body>
+    hello
+    <gui-1></gui-1>
+
+    <script type="module">
+      import kinda from '../kinda.js'
+
+      const { render, style } = kinda('gui-1')
+
+      render(() => `
+        World
+      `)
+
+      style(`
+        & {
+          background: dodgerblue;
+          border-radius: var(--rhythm);
+          color: lime;
+          display: block;
+        }
+      `)
+    </script>
+  </body>
+</html>
