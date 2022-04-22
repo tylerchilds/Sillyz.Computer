@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Lesson 2</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <gui-2></gui-2>
+
+    <script type="module">
+      import kinda from '../kinda.js'
+
+      const CELSIUS = 'CELSIUS'
+      const FAHRENHEIT = 'FAHRENHEIT'
+
+      const $ = kinda('gui-2', {
+        fahrenheit: undefined,
+        celsius: undefined,
+        errors: []
+      })
+
+      function celsiusChange(event) {
+        const { value, name } = event.target
+
+        if(invalid({ value, name })) return
+
+        $.write({
+          celsius: value,
+          fahrenheit: parseFloat(value) * (9/5) + 32
+        })
+      }
+
+      function fahrenheitChange(event) {
+        const { value, name } = event.target
+
+        if(invalid({ value, name })) return
+
+        $.write({
+          celsius: (parseFloat(value) - 32) * (5/9),
+          fahrenheit: value
+        })
+      }
+
+      function invalid({ value, name }) {
+        const errors = []
+
+        if(isNaN(value) || value === '') {
+          errors.push({ name, type: 'invalid' })
+        }
+
+        if(value === '') {
+          errors.push({ name, type: 'empty' })
+        }
+
+        $.write({
+          errors
+        })
+
+        return errors.length > 0
+      }
+
+      function classifyErrors(target, errors) {
+        target.className = errors.map(({ name, type }) => `
+          error-${name}-${type}
+        `).join(' ')
+      }
+
+      $.on('keyup', `[name="${CELSIUS}"]`, celsiusChange)
+      $.on('keyup', `[name="${FAHRENHEIT}"]`, fahrenheitChange)
+
+      $.render((target) => {
+        const { celsius='', fahrenheit='', errors } = $.read()
+
+        classifyErrors(target, errors)
+
+        return `
+          <input
+            name="${CELSIUS}"
+            type="text"
+            placeholder=""
+            value="${celsius}"/>
+          <label for="${CELSIUS}" placeholder="">Celsius</label>
+          <span>=</span>
+          <input
+            name="${FAHRENHEIT}"
+            type="text"
+            placeholder=""
+            value="${fahrenheit}"/>
+          <label for="${FAHRENHEIT}">Fahrenheit</label>
+        `
+      })
+
+      $.style(`
+        & {
+          line-height: 2;
+        }
+
+        &.error-${CELSIUS}-invalid [name="${CELSIUS}"],
+        &.error-${FAHRENHEIT}-invalid [name="${FAHRENHEIT}"] {
+          background: orange;
+        }
+
+        &.error-${CELSIUS}-empty [name="${CELSIUS}"],
+        &.error-${FAHRENHEIT}-empty [name="${FAHRENHEIT}"] {
+          background: white;
+        }
+
+        &.error-${CELSIUS}-invalid [name="${FAHRENHEIT}"],
+        &.error-${FAHRENHEIT}-invalid [name="${CELSIUS}"] {
+          background: gray;
+        }
+      `)
+
+      export default $
+    </script>
+  </body>
+</html>
