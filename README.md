@@ -1,13 +1,11 @@
-# Silly'z Computer
+# fresh project
 
-The comprehensive local development setup guide.
+### Usage
 
-## 1. Install [Deno](https://deno.land/#installation)
-
-Deno is the bedrock for Silly'z Computer.
-
-## 2. Run the application
+Start the project:
 
 ```
-$ deno run -Ar --unstable app.js
+deno task start
 ```
+
+This will watch the project directory and restart as necessary.
