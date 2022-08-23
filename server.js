@@ -34,10 +34,13 @@ async function blank(request) {
 
   try {
     return html(
-      await Deno.readFile(`${Deno.cwd()}/errors/404/index.html`)
+      await Deno.readFile(`.${pathname}/index.html`)
     )
   } catch(e) {
     console.error(e)
+    return html(
+      await Deno.readFile(`${Deno.cwd()}/errors/404/index.html`)
+    )
   }
 }
 
