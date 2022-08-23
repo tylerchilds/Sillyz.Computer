@@ -6,7 +6,7 @@ async function handleRequest(request) {
   console.log("get", pathname);
 
   if (pathname === '/') {
-    const file = await Deno.readFile('index.html')
+    const file = await Deno.readFile(`${Deno.cwd()}/pages/index.html`)
     return html(file)
   }
 
@@ -34,7 +34,7 @@ async function blank(request) {
 
   try {
     return html(
-      await Deno.readFile(`${Deno.cwd()}/404.html`)
+      await Deno.readFile(`${Deno.cwd()}/errors/404/index.html`)
     )
   } catch(e) {
     console.error(e)
