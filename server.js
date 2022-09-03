@@ -62,5 +62,5 @@ function getType(ext) {
   return types[ext] || types['html']
 }
 
-console.log("Listening on http://localhost:8000");
-serve(handleRequest);
+console.log("Listening on http://localhost:1998");
+serve(handleRequest, { addr: ':1998' });
