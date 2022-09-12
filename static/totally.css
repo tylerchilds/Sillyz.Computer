@@ -166,3 +166,9 @@ body {
   font-family: 'BerkeleyMono';
   height: 100%;
 }
+
+@media print {
+	html {
+		border: none;
+	}
+}

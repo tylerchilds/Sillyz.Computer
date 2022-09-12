@@ -1,9 +1,8 @@
-
-export const emptyEditor = {
+export const shape = {
   quillDelta: {},
   rawHTML: ""
 }
 
-export function editorById($, id) {
-  return $.read()[id] || emptyEditor
+export function shapeById($, id) {
+  return $.read()[id] || shape
 }
