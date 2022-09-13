@@ -1,12 +1,9 @@
 import tag from 'https://deno.land/x/tag@v0.2.0/mod.js';
 const $ = tag('highlighter')
 
-export default function highlight(string, color = defaultColor) {
-  return `<highlighter color="${color}">${string}</highlighter>`
-}
-
 $.render((target) => {
-  const color = target.getAttribute('color') || defaultColor
+  const color = target.getAttribute('color') || 'yellow'
+  target.setAttribute('color', color)
 
   if(!target.css) {
     target.css = `

@@ -1,6 +1,6 @@
 import tag from 'https://deno.land/x/tag@v0.2.0/mod.js';
 import Quill from 'https://esm.sh/quill@1.3.7'
-import { quillOptions } from './designer.js'
+import { customEvents, toolbarOptions } from './designer.js'
 
 const flags = {
   path: window.location.pathname,
@@ -25,10 +25,24 @@ function wysiwyg(target) {
 
   const { quillDelta } = shapeById($, flags.path)
 
+  const toolbarContainer = target.querySelector('.toolbar-container')
+
+  const quillOptions = {
+    theme: 'wozniak',
+    modules: {
+      toolbar: {
+        container: toolbarContainer || toolbarOptions,
+      }
+    }	
+  }
+
   target.quill = new Quill(target, quillOptions)
 
   target.quill.setContents(quillDelta)
   target.quill.on('editor-change', update(target))
+
+  if(toolbarContainer) target.appendChild(toolbarContainer)
+	customEvents(target.quill, $)
 }
 
 function update(target) {

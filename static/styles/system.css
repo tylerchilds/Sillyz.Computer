@@ -171,6 +171,17 @@
 	--font-heading: var(--font-family);
 	--font-body: var(--font-family);
 
+  --space-0: 0;
+  --space-1: 1px;
+  --space-2: 2px;
+  --space-3: 4px;
+  --space-4: 8px;
+  --space-5: 12px;
+  --space-6: 16px;
+  --space-7: 24px;
+  --space-8: 32px;
+  --space-9: 52px;
+
   --v-font-mono: 0;
   --v-font-casl: 0.5;
   --v-font-wght: 400;
@@ -191,6 +202,12 @@
 	border: 0;
 	margin: 0;
 	padding: 0;
+	transition: font-variation-settings 500ms ease-in-out;
+}
+
+html {
+	background: var(--bg);
+	color: var(--fg);
   font-family: 'Recursive';
   font-variation-settings:
     "MONO" var(--v-font-mono),
@@ -198,13 +215,6 @@
     "wght" var(--v-font-wght),
     "slnt" var(--v-font-slnt),
     "CRSV" var(--v-font-crsv);
-
-	transition: font-variation-settings 500ms ease-in-out;
-}
-
-html {
-	background: var(--bg);
-	color: var(--fg);
 }
 
 html,

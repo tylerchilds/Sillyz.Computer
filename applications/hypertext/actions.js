@@ -1,3 +1,5 @@
+import { Web3Storage, getFilesFromPath } from 'https://esm.sh/web3.storage@4.4.0'
+
 export default function actions(target, $, flags) {
   target.innerHTML = `
     <button data-recover data-id="${flags.path}">

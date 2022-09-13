@@ -29,16 +29,33 @@ class HighlighterBlot extends Inline {
   static formats() {
     return true;
   }
-
-  optimize(context) {
-    super.optimize(context);
-    if (this.domNode.tagName !== this.statics.tagName[0]) {
-      this.replaceWith(this.statics.blotName);
-    }
-  }
 }
 
 Quill.register(HighlighterBlot);
+
+
+class VariableTextBlot extends Inline {
+  static blotName = 'variable-text';
+  static tagName = 'variable-text';
+
+  static create() {
+    return super.create();
+  }
+
+  static formats() {
+    return true;
+  }
+}
+
+Quill.register(VariableTextBlot);
+
+var Parchment = Quill.import("parchment");
+
+let CustomClass = new Parchment.Attributor.Class('custom', 'ql-custom', {
+  scope: Parchment.Scope.INLINE
+});
+
+Quill.register(CustomClass, true);
 
 const toolbarOptions = [
   ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
@@ -60,13 +77,25 @@ const toolbarOptions = [
   ['clean']                                         // remove formatting button
 ];
 
-const quillOptions = {
-  theme: 'wozniak',
-  modules: {
-    toolbar: {
-      container: toolbarOptions,
-    }
-  }	
+function customEvents(quill, $) {
+	$.on('click', '.ql-highlighter', (event) => {
+		const format = quill.getFormat();
+		if(format.custom) {
+			quill.format('highlighter', '');
+		} else {
+			quill.format('highlighter', '');
+		}
+	})
+
+	$.on('click', '.ql-variable-text', (event) => {
+		const format = quill.getFormat();
+		if(format.custom) {
+			quill.format('variable-text', '');
+		} else {
+			quill.format('variable-text', '');
+		}
+	})
 }
 
-export { HighlighterBlot, WozniakTheme, toolbarOptions, quillOptions }
+
+export { HighlighterBlot, WozniakTheme, toolbarOptions, customEvents }

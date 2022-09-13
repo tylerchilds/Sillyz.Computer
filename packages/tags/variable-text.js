@@ -1,5 +1,4 @@
 import tag from 'https://deno.land/x/tag@v0.2.0/mod.js';
-//debugger
 
 const defaults = {
   monospace: '0',
@@ -8,7 +7,7 @@ const defaults = {
   slant: '0',
   cursive: '.5',
 }
-const $ = tag('text')
+const $ = tag('variable-text')
 
 $.render((target) => {
   if(!target.initialized) {
@@ -32,6 +31,12 @@ $.render((target) => {
     --v-font-wght: ${weight};
     --v-font-slnt: ${slant};
     --v-font-crsv: ${cursive};
+    font-variation-settings:
+      "MONO" var(--v-font-mono),
+      "CASL" var(--v-font-casl),
+      "wght" var(--v-font-wght),
+      "slnt" var(--v-font-slnt),
+      "CRSV" var(--v-font-crsv);
   `
 });
 
