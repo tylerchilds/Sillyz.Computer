@@ -42,7 +42,7 @@
 
     <script type="module">
       import Quill from 'https://esm.sh/quill@1.3.6'
-      import kinda from '/static/kinda.js'
+      import tag from 'https://deno.land/x/tag@v0.2.0/mod.js';
       import '/static/instrument.js'
 
       const path = window.location.pathname
@@ -56,7 +56,7 @@
         rawHTML: ""
       }
 
-      const $ = kinda('.z-404')
+      const $ = tag('.z-404')
 
       mount($, flags)
       berkeley($, flags)

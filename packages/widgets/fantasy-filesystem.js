@@ -10,11 +10,16 @@ $.render(target => {
   const { secret } = $.read()
 
   return `
-    <h2>Save Content</h2>
+    <h2>Publish</h2>
+    <br/>
+    <p>Overwrite the contents at this address on the Fantasy File System?</p>
+    <highlighter color="lime">
+      <variable-text monospace=".5" casual="0" cursive="0">
+        ${flags.fid}
+      </variable-text>
+    </highlighter>
     <form>
-      <label for"secret">Secret</label>
-      <input type="text" name="secret" value="${secret || ''}" placeholder="Secret..." />
-      <button type="submit">Save</button>
+      <button type="submit">Publish</button>
     </form>
   `
 })

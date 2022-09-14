@@ -1,9 +1,9 @@
-import kinda from './kinda.js'
+import tag from 'https://deno.land/x/tag@v0.2.0/mod.js';
 const controllers = {};
 
 const initialState = {}
 
-const $ = kinda('.z-gamepad', initialState)
+const $ = tag('.z-gamepad', initialState)
 
 $.render((target) => renderGamepads(target, $))
 

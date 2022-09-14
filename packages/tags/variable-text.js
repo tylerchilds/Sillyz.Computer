@@ -1,4 +1,4 @@
-import tag from 'https://deno.land/x/tag@v0.2.0/mod.js';
+import tag from 'http://localhost:4507/mod.js';
 
 const defaults = {
   monospace: '0',
@@ -11,9 +11,7 @@ const $ = tag('variable-text')
 
 $.render((target) => {
   if(!target.initialized) {
-    setTimeout(
-      () => mount(target, ['monospace', 'casual', 'weight', 'slant', 'cursive']
-    ), 1)
+    mount(target, ['monospace', 'casual', 'weight', 'slant', 'cursive'])
     target.initialized = true
   }
 
@@ -24,7 +22,6 @@ $.render((target) => {
     slant,
     cursive
   } = $.read()[target.id] || defaults
-
   target.style= `
     --v-font-mono: ${monospace};
     --v-font-casl: ${casual};
@@ -40,7 +37,9 @@ $.render((target) => {
   `
 });
 
-function mount(target, values) {
+async function mount(target, values) {
+  // calling write on a render is a footgun. Dodge it by a millisecond.
+  await sleep(1)
   values.map(x => {
     $.write({
       [x]: target.getAttribute(x) || defaults[x]
@@ -49,11 +48,16 @@ function mount(target, values) {
 }
 
 function merge(id) {
-  return (state, payload) => ({
-    ...state,
-    [id]: {
-      ...state[id],
-      ...payload
+  return (state, payload) => {
+    return {
+      ...state,
+      [id]: {
+        ...state[id],
+        ...payload
+      }
     }
-  })
+  }
+}
+async function sleep(x) {
+  new Promise(res => setTimeout(res, x))
 }

@@ -543,6 +543,7 @@
 }
 .ql-wozniak .ql-formats {
   display: inline-block;
+  line-height: 1;
   vertical-align: middle;
 }
 .ql-wozniak .ql-formats:after {

@@ -24,14 +24,42 @@
             Another thing!
           </menu-user>
         </span>
+
         <span class="ql-formats">
-          <button class="ql-bold" data-tooltip="Thick"></button>
-          <button class="ql-italic" data-tooltip="Slant"></button>
-          <button class="ql-highlighter" data-tooltip="Highlight like <highlighter color='orange'>this</highlighter>"></button>
-          <button class="ql-variable-text" data-tooltip="Make Lettering Fun"></button>
+          <button class="ql-bold" data-tooltip="<strong>example</strong>"></button>
+          <button class="ql-italic" data-tooltip="<em>example</em>"></button>
+          <button class="ql-underline" data-tooltip="<u>example</u>"></button>
+          <button class="ql-strike" data-tooltip="<strike>example</strike>"></button>
+        </span>
+
+        <span class="ql-formats">
+          <button type="button" class="ql-list" value="ordered" data-tooltip="<ol><li>example</li></ol>"></button>
+          <button type="button" class="ql-list" value="bullet" data-tooltip="<ul><li>example</li></ul>"></button>
+          <button type="button" class="ql-indent" value="-1" data-tooltip="Decrease Indent"></button>
+          <button type="button" class="ql-indent" value="+1" data-tooltip="Increase Indent"></button>
+        </span>
+
+        <span class="ql-formats">
+          <button type="button" class="ql-script" value="sub" data-tooltip="-- <sub>example</sub>">
+          <button type="button" class="ql-script" value="super" data-tooltip="-- <sup>example</sup>">
+        </span>
+
+        <span class="ql-formats">
+          <button class="ql-blockquote" data-tooltip="<blockquote>example</blockquote>"></button>
+          <button class="ql-code-block" data-tooltip="<pre class='ql-syntax'>example</pre>"></button>
+        </span>
+
+        <span class="ql-formats">
+          <button class="ql-highlighter" data-tooltip="<highlighter color='orange'>example</highlighter>">H</button>
+          <button class="ql-variable-text" data-tooltip="<variable-text monospace='1' slant='-15' casual='1' cursive='1' weight='800'>example</variable-text>">Vt</button>
+        </span>
+  
+
+        <span class="ql-formats">
+          <button type="button" class="ql-clean" data-tooltip="Clear formatting!"></button>
         </span>
         <span class="ql-formats">
-					<menu-resource model="hypertext" view="fantasy-filesystem" data-tooltip="Resource Menu Menu"></menu-resource>
+					<menu-resource model="hypertext" view="fantasy-filesystem" data-tooltip="Resource Menu"></menu-resource>
         </span>
       </div>
     </hypertext>

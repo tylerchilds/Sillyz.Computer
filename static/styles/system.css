@@ -209,12 +209,6 @@ html {
 	background: var(--bg);
 	color: var(--fg);
   font-family: 'Recursive';
-  font-variation-settings:
-    "MONO" var(--v-font-mono),
-    "CASL" var(--v-font-casl),
-    "wght" var(--v-font-wght),
-    "slnt" var(--v-font-slnt),
-    "CRSV" var(--v-font-crsv);
 }
 
 html,
@@ -402,8 +396,8 @@ dd {
 
 blockquote {
 	margin: 0 0 1em .5em;
-	border-left: 6rem solid var(--color-neutral-tint1);
-	padding: 1em .5em;
+	border-left: .25em solid var(--color-neutral-tint1);
+	padding: .125em .5em;
 }
 
 blockquote p:last-child {

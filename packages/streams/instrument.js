@@ -1,5 +1,5 @@
 import * as Tone from 'https://esm.sh/tone@next'
-import kinda from './kinda.js'
+import tag from 'https://deno.land/x/tag@v0.2.0/mod.js';
 import gamepad from "./gamepad.js"
 
 const synth = new Tone.Synth().toDestination()
@@ -11,7 +11,7 @@ const initialState = {
   activeStrums: []
 }
 
-const $ = kinda('.z-instrument', initialState)
+const $ = tag('.z-instrument', initialState)
 const baseOctave = 3
 const fretMap = [0, 1, 3, 2, 4]
 const notes = ["c", "d", "e", "f", "g", "a", "b"]

@@ -46,7 +46,7 @@ $.style(`
     display: grid;
     gap: 12px;
     grid-template-columns: auto 1fr auto;
-    padding: 0;
+    padding: 0 !important;
     width: 100% !important;
     height: auto !important
   }

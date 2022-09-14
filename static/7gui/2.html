@@ -11,12 +11,12 @@
     <gui-2></gui-2>
 
     <script type="module">
-      import kinda from '../kinda.js'
+      import tag from 'https://deno.land/x/tag@v0.2.0/mod.js';
 
       const CELSIUS = 'CELSIUS'
       const FAHRENHEIT = 'FAHRENHEIT'
 
-      const $ = kinda('gui-2', {
+      const $ = tag('gui-2', {
         fahrenheit: undefined,
         celsius: undefined,
         errors: []

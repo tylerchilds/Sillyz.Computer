@@ -109,13 +109,12 @@
    text-shadow: 2px 2px black;
 }
 
-#logo text:first-child {
+#logo variable-text:first-child {
   display: block;
   font-size: 16vmin;
-  transform: rotate
 }
 
-#logo text:last-child {
+#logo variable-text:last-child {
   display: block;
   font-size: 7vmin;
   letter-spacing: .25em;
@@ -170,11 +169,11 @@ rainbow-button button {
   <body>
     <z-skybox></z-skybox>
 
-    <script src="/packages/tags/text.js" type="module"></script>
+    <script src="/packages/tags/variable-text.js" type="module"></script>
     <script src="/packages/tags/highlighter.js" type="module"></script>
     <script src="/packages/tags/rainbow-button.js" type="module"></script>
     <script type="module">
-      import tag from '/static/kinda.js'
+      import tag from 'https://deno.land/x/tag@v0.2.0/mod.js';
 
       const { render, style } = tag('z-skybox')
 
@@ -193,15 +192,15 @@ rainbow-button button {
           <div class="d"></div>
           <div class="e"></div>
           <div class="f">
-            <iframe title="Avatar of a Surfer" src="./static/avatar.html" id="surfer-avatar"></iframe>
+            <iframe title="Avatar of a Surfer" src="/pages/avatar.html" id="surfer-avatar"></iframe>
             <div id="foreground">
               <div id="logo">
-                <text monospace="0" slant="-15" casual="1" cursive="1" weight="800">
+                <variable-text id="vt1" monospace="0" slant="-15" casual="1" cursive="1" weight="800">
                   Sillyz.
-                </text>
-                <text monospace="1" slant="0" casual="0" cursive="0">
+                </variable-text>
+                <variable-text id="vt2" monospace="1" slant="0" casual="0" cursive="0">
                   COMPUTER
-                </text>
+                </variable-text>
               </div>
               <rainbow-button>
                 <button onclick="javascript:alert('Please check back later');">

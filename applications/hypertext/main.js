@@ -12,15 +12,15 @@ $.render(wysiwyg)
 export default $
 
 async function download(target, $, flags) {
-  await fetch(flags.fid)
+  const value = await fetch(flags.fid)
     .then(res => {
       if(res.status !== 200) throw new Error()
       return res.text()
     })
-    .then(value => {
-      target.quill.setContents({})
-      target.quill.clipboard.dangerouslyPasteHTML(0, value);
-    }).catch(console.error)
+    .catch(console.log)
+
+  target.quill.setContents({})
+  target.quill.clipboard.dangerouslyPasteHTML(0, value || "<p><highlighter><em>What's on your mind...<em></highlighter></p><p>Tell me...</p>");
 }
 
 function wysiwyg(target) {
