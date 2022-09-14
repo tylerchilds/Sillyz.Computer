@@ -406,9 +406,9 @@
   cursor: pointer;
   display: inline-block;
   float: left;
-  height: 24px;
+  height: 40px;
   padding: 3px 5px;
-  width: 28px;
+  width: 40px;
 }
 .ql-wozniak.ql-toolbar button svg,
 .ql-wozniak .ql-toolbar button svg {

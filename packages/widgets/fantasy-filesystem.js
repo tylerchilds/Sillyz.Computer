@@ -4,7 +4,7 @@ const flags = {
   fid: window.location.protocol + '//' + window.location.host + '/ffs' + window.location.pathname
 }
 
-const $ = tag('fictional-filesystem')
+const $ = tag('fantasy-filesystem')
 
 $.render(target => {
   const { secret } = $.read()

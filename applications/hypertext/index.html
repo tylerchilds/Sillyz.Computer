@@ -20,16 +20,18 @@
     <hypertext>
       <div class="toolbar-container">
         <span class="ql-formats">
-					<menu-user data-tippy="User Menu"></menu-user>
+					<menu-user>
+            Another thing!
+          </menu-user>
         </span>
         <span class="ql-formats">
-          <button class="ql-bold" data-tippy="Thick"></button>
-          <button class="ql-italic" data-tippy="Slant"></button>
-          <button class="ql-highlighter" data-tippy="Highlight like <highlighter color='orange'>this</highlighter>"></button>
-          <button class="ql-variable-text" data-tippy="Make Lettering Fun"></button>
+          <button class="ql-bold" data-tooltip="Thick"></button>
+          <button class="ql-italic" data-tooltip="Slant"></button>
+          <button class="ql-highlighter" data-tooltip="Highlight like <highlighter color='orange'>this</highlighter>"></button>
+          <button class="ql-variable-text" data-tooltip="Make Lettering Fun"></button>
         </span>
         <span class="ql-formats">
-					<menu-resource model="hypertext" view="fictional-filesystem" data-tippy="Resource Menu Menu"></menu-resource>
+					<menu-resource model="hypertext" view="fantasy-filesystem" data-tooltip="Resource Menu Menu"></menu-resource>
         </span>
       </div>
     </hypertext>
@@ -43,7 +45,7 @@
 		<script type="module" src="/packages/tags/highlighter.js"></script>
 		<script type="module" src="/packages/tags/variable-text.js"></script>
 
-		<script type="module" src="/packages/ui/tippy.js"></script>
+		<script type="module" src="/packages/ui/tooltip.js"></script>
 
 		<script type="">
 

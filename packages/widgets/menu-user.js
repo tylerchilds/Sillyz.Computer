@@ -1,28 +1,26 @@
 /*
   TODO: There's a bug where this doesn't trigger on secondary toggles so we gotta figure that out
 */
-import tag from 'https://deno.land/x/tag@v0.2.0/mod.js';
-
-import * as focusTrap from 'https://esm.sh/focus-trap';
+import tag from 'http://localhost:4507/mod.js';
+import { popover } from '/packages/ui/popover.js';
 
 const $ = tag('menu-user')
 
-function toggle({ target }) {
-  const { active } = $.read()
-  focustrap(target, !active)
-}
-
-$.on('click', 'button', toggle)
-
-$.render(target => {
-  if(!target.trap) load(target)
-
-  const { content, active } = $.read()
-
-  return `
-    <div class="user-menu-content ${active ? 'active' : ''}">
+function userMenu() {
+  const { content } = $.read()
+  popover(event, `
+    <div class="user-menu-content">
       ${content}
     </div>
+  `)
+}
+
+$.on('click', 'button', userMenu)
+
+$.render(target => {
+  if(!target.ready) load(target)
+
+  return `
     <button>
       <img src="https://tychi.me/professional-headshot.jpg" alt="Professional photo of Ty" />
     </button>
@@ -37,7 +35,8 @@ $.style(`
 
   & img {
     border-radius: 100%;
-    max-width: 3rem;
+    width: 40px;
+    height: 40px;
   }
 
   & button {
@@ -48,7 +47,8 @@ $.style(`
     gap: 12px;
     grid-template-columns: auto 1fr auto;
     padding: 0;
-    width: 100%;
+    width: 100% !important;
+    height: auto !important
   }
 
   & a {
@@ -67,12 +67,8 @@ $.style(`
     right: 0;
     top: -12px;
     transform: translateY(-100%);
-    width: 100%;
-  }
-
-  & .active {
     animation: &-fade-in 200ms ease-in-out;
-    display: block;
+    width: 100%;
   }
 
   & .menu-item {
@@ -96,27 +92,13 @@ $.style(`
 
 // asyncronously load a pane on first render
 async function load(target) {
-  target.trap = focusTrap.createFocusTrap(target, {
-    onActivate: activate,
-    onDeactivate: deactivate,
-    clickOutsideDeactivates: true
-  });
-
-
+  target.ready = true
   const content = await new Promise(resolve => {
     resolve(target.innerHTML)
   })
 
-  const { active } = $.read()
-  focustrap(target, active)
+  console.log(content)
   $.write({ content })
-}
-
-function focustrap(target, active) {
-  const { activate, deactivate } = target.closest($.selector).trap;
-  active
-    ? activate()
-    : deactivate()
 }
 
 function activate(){

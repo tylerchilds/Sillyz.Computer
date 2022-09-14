@@ -1,27 +1,25 @@
-/*
- * Tippy: Like if Clippy was a Tooltip
- */
 import tag from 'https://deno.land/x/tag@v0.2.0/mod.js';
 
 const $ = tag('body')
+export default $
 
-$.on('mouseenter', '[data-tippy]', (event) => {
-  tippy(event, event.target.dataset.tippy);
+$.on('mouseenter', '[data-tooltip]', (event) => {
+  tooltip(event, event.target.dataset.tooltip);
 });
 
-$.on('mousemove', '[data-tippy]', (event) => {
-  tippy(event);
+$.on('mousemove', '[data-tooltip]', (event) => {
+  tooltip(event);
 });
 
-$.on('mouseleave', '[data-tippy]', (event) => {
-  tippy();
+$.on('mouseleave', '[data-tooltip]', (event) => {
+  tooltip();
 });
 
-// initialize tippy
-const node = document.createElement('ctx-tippy');
+// initialize tooltip
+const node = document.createElement('ctx-tooltip');
 document.body.appendChild(node);
 
-export default function tippy(event, content) {
+export function tooltip(event, content) {
   switch(arguments.length) {
     case 2:
       show(event, content);
@@ -63,9 +61,9 @@ function draw() {
   node.style.setProperty("--y", y + 'px');
 }
 
-const tippyStyles = `
+const tooltipStyles = `
   <style>
-    ctx-tippy {
+    ctx-tooltip {
       background: white;
       color: rgba(0, 0, 0, .9);
       border-radius: 2px;
@@ -92,11 +90,11 @@ const tippyStyles = `
       z-index: -1;
     }
 
-    ctx-tippy * {
+    ctx-tooltip * {
       pointer-events: auto;
     }
 
-    ctx-tippy.active {
+    ctx-tooltip.active {
       display: block;
       opacity: 1;
       z-index: 3;
@@ -104,4 +102,4 @@ const tippyStyles = `
   </style>
 `;
 
-document.body.insertAdjacentHTML("beforeend", tippyStyles);
+document.body.insertAdjacentHTML("beforeend", tooltipStyles);
