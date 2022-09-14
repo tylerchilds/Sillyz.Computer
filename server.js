@@ -1,6 +1,36 @@
 import { serve } from "https://deno.land/std@0.114.0/http/server.ts";
+import { Status } from "https://deno.land/std@0.114.0/http/http_status.ts";
+import { ensureFileSync } from "https://deno.land/std@0.114.0/fs/mod.ts";
+
+const methods = {
+  'GET': handleGet,
+  'POST': handlePost,
+}
+
+const modes = {
+  'save': save,
+}
+
+async function save(pathname, params) {
+  const { value } = params
+  ensureFileSync(`.${pathname}`)
+  await Deno.writeTextFile(`.${pathname}`, value).catch(console.error)
+  return html(value)
+}
 
 async function handleRequest(request) {
+  console.log('\n\n\n\nWHAT'+ request.method +'\n\n\n\n')
+  return await (methods[request.method] || methods['GET'])(request)
+}
+
+async function handlePost(request) {
+  const { pathname } = new URL(request.url);
+  const params = await request.json()
+
+  return (modes[params.mode] || function(){})(pathname, params)
+}
+
+async function handleGet(request) {
   const { pathname } = new URL(request.url);
 
   console.log("get", pathname);
@@ -39,16 +69,18 @@ async function blank(request) {
   } catch(e) {
     console.error(e)
     return html(
-      await Deno.readFile(`${Deno.cwd()}/errors/404/index.html`)
+      await Deno.readFile(`${Deno.cwd()}/applications/hypertext/index.html`),
+      { status: Status.NotFound }
     )
   }
 }
 
-function html(content) {
+function html(content, options = {}) {
   return new Response(content, {
     headers: {
       'content-type': getType('html'),
     },
+    ...options
   })
 }
 

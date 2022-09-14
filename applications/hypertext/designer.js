@@ -29,6 +29,8 @@ class HighlighterBlot extends Inline {
   static formats() {
     return true;
   }
+
+  optimize() {}
 }
 
 Quill.register(HighlighterBlot);
@@ -45,6 +47,8 @@ class VariableTextBlot extends Inline {
   static formats() {
     return true;
   }
+
+  optimize() {}
 }
 
 Quill.register(VariableTextBlot);

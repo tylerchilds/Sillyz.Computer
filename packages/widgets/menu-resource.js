@@ -5,7 +5,12 @@ import { showModal, hideModal } from '/packages/ui/modal.js'
 const $ = tag('menu-resource')
 
 function resourceMenu({ target }) {
-  showModal('resource')
+  const resource = target.closest($.selector);
+
+  const model = resource.getAttribute('model')
+  const view = resource.getAttribute('view')
+
+  showModal(`<${view} model="${model}"></${view}>`)
 }
 
 $.on('click', 'button', resourceMenu)
@@ -13,7 +18,7 @@ $.on('click', 'button', resourceMenu)
 $.render(target => {
   return `
     <button>
-      modal
+      ...
     </button>
   `
 })
