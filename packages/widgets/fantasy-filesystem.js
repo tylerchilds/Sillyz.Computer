@@ -1,4 +1,4 @@
-import tag, { read } from 'http://localhost:4507/mod.js';
+import tag, { read } from 'https://deno.land/x/tag@v0.3.2/mod.js';
 
 const flags = {
   fid: window.location.protocol + '//' + window.location.host + '/ffs' + window.location.pathname

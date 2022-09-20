@@ -1,4 +1,4 @@
-import tag from 'https://deno.land/x/tag@v0.2.0/mod.js';
+import tag from 'https://deno.land/x/tag@v0.3.2/mod.js';
 const $ = tag('rainbow-button')
 
 $.style(`

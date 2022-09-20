@@ -1,4 +1,4 @@
-import tag from 'http://localhost:4507/mod.js';
+import tag from 'https://deno.land/x/tag@v0.3.2/mod.js';
 
 import Quill from 'https://esm.sh/quill@1.3.7'
 import { customEvents, toolbarOptions } from './designer.js'

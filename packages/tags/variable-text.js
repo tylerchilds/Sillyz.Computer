@@ -1,4 +1,4 @@
-import tag from 'http://localhost:4507/mod.js';
+import tag from 'https://deno.land/x/tag@v0.3.2/mod.js';
 
 const defaults = {
   monospace: '0',
