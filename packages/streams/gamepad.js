@@ -1,16 +1,23 @@
 import tag from 'https://deno.land/x/tag@v0.3.2/mod.js';
 const controllers = {};
 
+export default function gamepads() {
+  const ids = Object.keys(controllers) || []
+
+	return ids
+    .map(x => controllers[x])
+    .map(gatherInputs)
+}
+
 const initialState = {}
 
-const $ = tag('.z-gamepad', initialState)
+const $ = tag('debug-gamepads', initialState)
 
 $.render((target) => renderGamepads(target, $))
 
 function connecthandler(e) {
   const { index } = e.gamepad
   controllers[index] = e.gamepad;
-  requestAnimationFrame(gamepadLoop);
 }
 
 function disconnecthandler(e) {
@@ -42,9 +49,8 @@ function renderInputs(_$, flags) {
 }
 
 function renderGamepads(_target, $) {
-  const { gamepads } = $.read()
 
-  const list = gamepads
+  const list = gamepads()
     .map((gamepad, index) => `
       <li class="gamepad" id="${gamepad.id}">
         <label>${index+1}: ${gamepad.id}</label>
@@ -53,18 +59,6 @@ function renderGamepads(_target, $) {
     `).join('')
 
   return `<ul class="gamepads">${list}</ul>`
-}
-
-function gamepadLoop(time) {
-  const ids = Object.keys(controllers) || []
-
-	const gamepads = ids
-    .map(x => controllers[x])
-    .map(gatherInputs)
-
-  $.write({ time, gamepads })
-
-  requestAnimationFrame(gamepadLoop);
 }
 
 function gatherInputs(gamepad, _index) {
@@ -125,5 +119,3 @@ $.style(`
     place-content: center;
   }
 `)
-
-export default $

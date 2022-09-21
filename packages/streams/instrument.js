@@ -1,14 +1,13 @@
 import * as Tone from 'https://esm.sh/tone@next'
 import tag from 'https://deno.land/x/tag@v0.3.2/mod.js';
-import gamepad from "./gamepad.js"
-
-const synth = new Tone.Synth().toDestination()
+import gamepads from "./gamepad.js"
 
 const initialState = {
   activeChords: [],
   activeNotes: [],
   activeOctaves: [],
-  activeStrums: []
+  activeStrums: [],
+  frames: {},
 }
 
 const $ = tag('.z-instrument', initialState)
@@ -88,36 +87,30 @@ const shades = {
   [-1]: [1, 5],
 }
 
-$.ready(() => {
-  $.write({ frames: {}, ready: false })
-})
-
 function ready() {
   return new Promise((ready) => {
     (function loop() {
-      if($.read().ready) {
-        return ready()
-      }
-
-      if(gamepad.read().gamepads) {
-        $.write({ ready: true })
-        return ready()
-      }
-
-      requestAnimationFrame(loop)
+      gamepads() ? ready() : requestAnimationFrame(loop)
     })()
   })
 }
 
+let synths
+let once = () => { once = () => null
+  synths = [
+    new Tone.Synth().toDestination()
+  ]
+}
+
 (async function loop(time) {
   await ready()
-  const { gamepads } = gamepad.read()
+  once()
 
-  const activeFrets = gamepads.map(x => toFrets($, x))
+  const activeFrets = gamepads().map(x => toFrets($, x))
   const activeChords = activeFrets.map(x => toChords($, x))
   const activeNotes = activeChords.map(getNote)
   const activeOctaves = activeChords.map(getOctave)
-  const activeStrums = gamepads.map(x => toStrums($, x))
+  const activeStrums = gamepads().map(x => toStrums($, x))
 
   const activeColors = activeFrets.map(getColor)
   const activeShades = activeStrums.map(getShades)
@@ -141,6 +134,7 @@ function ready() {
   activeStrums.map((strum, i) => {
     if(isStrummed(strum)) {
       const snapshot = () => playNote($, {
+        index: i,
         note: activeNotes[i],
         octave: activeOctaves[i],
         theme: activeThemes[i]
@@ -255,8 +249,9 @@ function throttle($, flags) {
 }
 
 function playNote(_$, flags) {
-  const { note, octave, theme } = flags
-  synth.triggerAttackRelease(`${note}${octave}`, "8n");
+  const { note, octave, theme, index } = flags
+  const now = Tone.now()
+  synths[index].triggerAttackRelease(`${note}${octave}`, "8n", now);
 
   const html = document.querySelector('html')
   html.style = `
