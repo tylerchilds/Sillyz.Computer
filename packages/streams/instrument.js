@@ -111,6 +111,7 @@ let once = () => { once = () => null
   const activeNotes = activeChords.map(getNote)
   const activeOctaves = activeChords.map(getOctave)
   const activeStrums = gamepads().map(x => toStrums($, x))
+  const activeMotion = gamepads().map(x => toMotion($, x))
 
   const activeColors = activeFrets.map(getColor)
   const activeShades = activeStrums.map(getShades)
@@ -126,13 +127,14 @@ let once = () => { once = () => null
     activeNotes,
     activeOctaves,
     activeStrums,
+    activeMotion,
     activeColors,
     activeShades,
     activeThemes
   })
 
   activeStrums.map((strum, i) => {
-    if(isStrummed(strum)) {
+    if(isActuated(strum)) {
       const snapshot = () => playNote($, {
         index: i,
         note: activeNotes[i],
@@ -147,6 +149,30 @@ let once = () => { once = () => null
       })
     }
   })
+
+
+  activeMotion.map(({ horizontal }, i) => {
+    if(isActuated(horizontal)) {
+      const cheat = {[-1]: 37, [1]: 39}[horizontal]
+			const activate = () => {
+				document.dispatchEvent(new KeyboardEvent("keydown", {
+					view: window,
+					keyCode: cheat,
+					bubbles: true,
+					cancelable: true
+				}))
+			}
+      console.log(activate, cheat)
+
+			throttle($, {
+				key: 'slide',
+				activate,
+				time: Date.now(),
+				fps: 1000 / 4
+			})
+    }
+  })
+
 
   requestAnimationFrame(loop)
 })()
@@ -190,6 +216,13 @@ function toStrums(_$, flags) {
   return strumbar
 }
 
+function toMotion(_$, flags) {
+  const [vertical] = [...flags.axes].splice(-1)
+  const [horizontal] = [...flags.axes].splice(-2)
+  return {horizontal, vertical}
+}
+
+
 function getNote(chord) {
   return notes[mod(chord, notes.length)]
 }
@@ -224,7 +257,7 @@ function mod(x, n) {
   return ((x % n) + n) % n;
 }
 
-function isStrummed(value) {
+function isActuated(value) {
   return [-1, 1].includes(value)
 }
 
