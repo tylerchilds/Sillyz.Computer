@@ -8,6 +8,8 @@ import "/packages/tags/variable-text.js"
 
 import "/packages/ui/tooltip.js"
 import "/packages/streams/instrument.js"
+import Color from "https://esm.sh/colorjs.io@0.4.0";
+
 
 const flags = {
   fid: window.location.protocol + '//' + window.location.host + '/ffs' + window.location.pathname
@@ -31,13 +33,13 @@ $.render(() => {
 })
 
 const lightnessStops = [
-  ['0', '90'],
-  ['0', '60'],
-  ['0', '30'],
-  ['0', '0'],
-  ['30', '0'],
-  ['60', '0'],
-  ['90', '0']
+  [5, 30],
+  [20, 45],
+  [35, 60],
+  [50, 75],
+  [65, 90],
+  [80, 105],
+  [95, 120]
 ]
 
 $HCW.write({ colors: recalculate() })
@@ -45,7 +47,9 @@ $HCW.render(() => {
   const { start, length, reverse, colors } = $HCW.read()
   const wheel = colors.map((lightness, i) => {
     const steps = lightness.map((x) => `
-      <button class="step" style="background: var(${x.name})"></button>
+      <button class="step" style="background: var(${x.name})">
+        [${x.block}, ${x.inline}]
+      </button>
     `).join('')
     return `
       <div class="group" style="transform: rotate(${i * 30}deg)">
@@ -75,13 +79,13 @@ $HCW.render(() => {
 
 $HCW.style(`
   & .wheel {
-    background: black;
     display: grid;
     grid-template-areas: "slot";
     grid-template-rows: 40vmin;
     grid-template-columns: 40vmin;
     place-content: start center;
-    height: 60vmin;
+    padding: 10vmin;
+    height: 80vmin;
   }
   & .group {
     grid-area: slot;
@@ -114,13 +118,17 @@ function recalculate() {
       ? start - step
       : start + step
 
-    return lightnessStops.map(([w, b]) => {
-      const name = `--hwb-${hueIndex}-${w}-${b}`
-      const value = `hwb(${hue} ${w}% ${b}%)`
+    return lightnessStops.map(([l, c], i) => {
+      const name = `--wheel-${hueIndex}-${i}`
+      const value = new Color('lch', [l, c, hue])
+        .display()
+        .toString()
 
       return {
         name,
-        value
+        value,
+        block: hueIndex,
+        inline: i
       }
     })
   })

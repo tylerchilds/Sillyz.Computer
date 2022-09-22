@@ -1,6 +1,8 @@
-import * as Tone from 'https://esm.sh/tone@next'
-import tag from 'https://deno.land/x/tag@v0.3.2/mod.js';
+import tag, { listen } from 'https://deno.land/x/tag@v0.3.2/mod.js';
+import { showModal, hideModal } from '/packages/ui/modal.js'
 import gamepads from "./gamepad.js"
+
+let Tone;
 
 const initialState = {
   activeChords: [],
@@ -10,8 +12,7 @@ const initialState = {
   frames: {},
 }
 
-const $ = tag('.z-instrument', initialState)
-const baseOctave = 3
+const $ = tag('z-instrument', initialState)
 const fretMap = [0, 1, 3, 2, 4]
 const notes = ["c", "d", "e", "f", "g", "a", "b"]
 
@@ -50,61 +51,72 @@ const chords = [
 ]
 
 const colors = {
-  "x    ": 'green',
-  " x   ": 'red',
-  "  x  ": 'yellow',
-  "   x ": 'blue',
-  "    x": 'orange',
+  "x    ": [-1, -1],
+  " x   ": [0, 0],
+  "  x  ": [0, 1],
+  "   x ": [0, 2],
+  "    x": [0, 3],
 
-  "xx   ": 'yellow',
-  "x x  ": 'orange',
-  "x  x ": 'chartruese',
-  "x   x": 'teal',
+  "xx   ": [0, 4],
+  "x x  ": [0, 5],
+  "x  x ": [0, 6],
+  "x   x": [1, 0],
 
-  "xxx  ": 'amber',
-  "xx x ": 'indigo',
-  "xx  x": 'chartruese',
-  "xxxx ": 'magenta',
+  "xxx  ": [1, 1],
+  "xx x ": [1, 2],
+  "xx  x": [1, 3],
+  "xxxx ": [1, 4],
 
-  "xxx x": 'amber',
-  "xxxxx": 'green',
-  " xx  ": 'orange',
-  " x x ": 'violet',
+  "xxx x": [1, 5],
+  "xxxxx": [1, 6],
+  " xx  ": [2, 0],
+  " x x ": [2, 1],
 
-  " x  x": 'flame',
-  " xxx ": 'fuschia',
-  " xx x": 'orange',
-  " xxxx": 'chartruese',
+  " x  x": [2, 2],
+  " xxx ": [2, 3],
+  " xx x": [2, 4],
+  " xxxx": [2, 5],
 
-  "  xx ": 'green',
-  "  x x": 'amber',
-  "  xxx": 'amber',
-  "   xx": 'fuschia'
+  "  xx ": [2, 6],
+  "  x x": [3, 0],
+  "  xxx": [3, 1],
+  "   xx": [3, 2]
 }
 
-const shades = {
-  [1]: [6, 2],
-  [-1]: [1, 5],
-}
+const octaves = [...Array(12)].map((_x, i) => i)
+const steps = [...Array(7)].map((_x, i) => i)
 
-function ready() {
-  return new Promise((ready) => {
-    (function loop() {
-      gamepads() ? ready() : requestAnimationFrame(loop)
-    })()
-  })
-}
+let baseOctave = 0
+const eventMap = {
+  37: () => baseOctave--,
+  39: () => baseOctave++
+};
 
-let synths
-let once = () => { once = () => null
-  synths = [
-    new Tone.Synth().toDestination()
-  ]
+document.addEventListener('keydown', (event) => {
+  const handler = eventMap[event.keyCode] || console.log
+  handler()
+});
+
+let synths = [...Array(12)]
+let once = async () => { once = () => null
+  let off
+  showModal(`Audio will be started.`)
+  await new Promise((done) => off = listen('click', '*',
+    async () => {
+      if(off) {
+        off();
+        off = false;
+        Tone = await import('https://esm.sh/tone@next')
+        done()
+      }
+    }
+  ))
+
+  synths = synths.map(() => new Tone.Synth().toDestination())
 }
 
 (async function loop(time) {
-  await ready()
-  once()
+  await once()
 
   const activeFrets = gamepads().map(x => toFrets($, x))
   const activeChords = activeFrets.map(x => toChords($, x))
@@ -114,10 +126,9 @@ let once = () => { once = () => null
   const activeMotion = gamepads().map(x => toMotion($, x))
 
   const activeColors = activeFrets.map(getColor)
-  const activeShades = activeStrums.map(getShades)
-  const activeThemes = activeColors.map((x, i) => toTheme($, {
-    color: x,
-    shades: activeShades[i]
+  const activeThemes = activeColors.map(([block, inline], i) => toTheme($, {
+    block,
+    inline,
   }))
 
   $.write({
@@ -129,7 +140,6 @@ let once = () => { once = () => null
     activeStrums,
     activeMotion,
     activeColors,
-    activeShades,
     activeThemes
   })
 
@@ -162,7 +172,6 @@ let once = () => { once = () => null
 					cancelable: true
 				}))
 			}
-      console.log(activate, cheat)
 
 			throttle($, {
 				key: 'slide',
@@ -233,19 +242,15 @@ function getOctave(chord) {
 }
 
 function getColor(frets) {
-  return colors[frets] || 'silver'
-}
-
-function getShades(strum) {
-  return shades[strum] || [1, 7]
+  return colors[frets] || [-1, -2]
 }
 
 function toTheme(_$, flags) {
-  const { color, shades } = flags
-  const [x, y] = shades
+  const { block, inline } = flags
+  const x = (baseOctave + block) % octaves.length;
+  const y = inline % steps.length;
   return {
-    background: `var(--${color}${x})`,
-    foreground: `var(--${color}${y})`
+    background: `var(--wheel-${octaves.at(x)}-${steps.at(y)})`,
   }
 }
 
@@ -281,7 +286,7 @@ function throttle($, flags) {
   }
 }
 
-function playNote(_$, flags) {
+export function playNote(_$, flags) {
   const { note, octave, theme, index } = flags
   const now = Tone.now()
   synths[index].triggerAttackRelease(`${note}${octave}`, "8n", now);
@@ -303,6 +308,7 @@ $.style(`
   }
   & .note {
     font-size: 10vh;
+    line-height: 1;
   }
 
   & .strummed {
