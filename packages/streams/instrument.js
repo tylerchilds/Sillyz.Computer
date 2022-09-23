@@ -7,14 +7,13 @@ let Tone;
 const initialState = {
   activeChords: [],
   activeNotes: [],
-  activeOctaves: [],
   activeStrums: [],
   frames: {},
 }
 
 const $ = tag('z-instrument', initialState)
 const fretMap = [0, 1, 3, 2, 4]
-const notes = ["c", "d", "e", "f", "g", "a", "b"]
+export const notes = ["c", "d", "e", "f", "g", "a", "b"]
 
 const chords = [
   "x    ", // a ( c - 2 )
@@ -83,8 +82,7 @@ const colors = {
   "   xx": [3, 2]
 }
 
-const octaves = [...Array(12)].map((_x, i) => i)
-const steps = [...Array(7)].map((_x, i) => i)
+export const octaves = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, -2, -1]
 
 let baseOctave = 0
 const eventMap = {
@@ -121,12 +119,11 @@ let once = async () => { once = () => null
   const activeFrets = gamepads().map(x => toFrets($, x))
   const activeChords = activeFrets.map(x => toChords($, x))
   const activeNotes = activeChords.map(getNote)
-  const activeOctaves = activeChords.map(getOctave)
   const activeStrums = gamepads().map(x => toStrums($, x))
   const activeMotion = gamepads().map(x => toMotion($, x))
 
-  const activeColors = activeFrets.map(getColor)
-  const activeThemes = activeColors.map(([block, inline], i) => toTheme($, {
+  const activeKeys = activeFrets.map(getColor)
+  const activeThemes = activeKeys.map(([block, inline], i) => toTheme($, {
     block,
     inline,
   }))
@@ -136,10 +133,9 @@ let once = async () => { once = () => null
     activeFrets,
     activeChords,
     activeNotes,
-    activeOctaves,
     activeStrums,
     activeMotion,
-    activeColors,
+    activeKeys,
     activeThemes
   })
 
@@ -147,9 +143,8 @@ let once = async () => { once = () => null
     if(isActuated(strum)) {
       const snapshot = () => playNote($, {
         index: i,
-        note: activeNotes[i],
-        octave: activeOctaves[i],
-        theme: activeThemes[i]
+        theme: activeThemes[i],
+        keys: activeKeys[i],
       })
       throttle($, {
         key: `strum-${i}`,
@@ -238,7 +233,8 @@ function getNote(chord) {
 
 function getOctave(chord) {
   const rawOctave = Math.floor(divide(chord, notes.length))
-  return rawOctave + baseOctave
+  console.log(baseOctave)
+  return mod(baseOctave + rawOctave, octaves.length)
 }
 
 function getColor(frets) {
@@ -247,10 +243,10 @@ function getColor(frets) {
 
 function toTheme(_$, flags) {
   const { block, inline } = flags
-  const x = (baseOctave + block) % octaves.length;
-  const y = inline % steps.length;
+  const x = mod(baseOctave + block, octaves.length);
+  const y = mod(inline, notes.length);
   return {
-    background: `var(--wheel-${octaves.at(x)}-${steps.at(y)})`,
+    background: `var(--wheel-${x}-${y})`,
   }
 }
 
@@ -287,15 +283,23 @@ function throttle($, flags) {
 }
 
 export function playNote(_$, flags) {
-  const { note, octave, theme, index } = flags
+  const { keys, theme, index } = flags
+  const [block, inline] = keys
+
+  const note = notes[(parseInt(inline) + 6) % notes.length]
+  const octave = octaves.at(parseInt(mod(block + baseOctave, octaves.length)))
   const now = Tone.now()
+
+  console.log(note, octave)
   synths[index].triggerAttackRelease(`${note}${octave}`, "8n", now);
 
-  const html = document.querySelector('html')
-  html.style = `
-    --bg: ${theme.background};
-    --fg: ${theme.foreground};
-  `
+  if(theme) {
+    const html = document.querySelector('html')
+    html.style = `
+      --bg: ${theme.background};
+      --fg: ${theme.foreground};
+    `
+  }
 }
 
 $.style(`
