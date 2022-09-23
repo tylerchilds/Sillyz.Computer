@@ -1,4 +1,4 @@
-import tag from 'https://thelanding.page/tag/tag.bundle.js'
+import { tag } from "/deps.js"
 import * as JoyCon from "https://esm.sh/joy-con-webhid@0.2.0"
 
 const $ = tag('data-gamepads')

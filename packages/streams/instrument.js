@@ -1,4 +1,4 @@
-import tag, { listen } from 'https://deno.land/x/tag@v0.3.2/mod.js';
+import { tag, listen } from "/deps.js"
 import { showModal, hideModal } from '/packages/ui/modal.js'
 import gamepads from "./gamepad.js"
 

@@ -1,7 +1,7 @@
 /*
   TODO: There's a bug where this doesn't trigger on secondary toggles so we gotta figure that out
 */
-import tag from 'https://deno.land/x/tag@v0.3.2/mod.js';
+import { tag } from "/deps.js"
 import { popover } from '/packages/ui/popover.js';
 
 const $ = tag('menu-user')

@@ -1,5 +1,4 @@
-import tag from 'https://deno.land/x/tag@v0.3.2/mod.js';
-import * as focusTrap from 'https://esm.sh/focus-trap';
+import { tag, focusTrap } from "/deps.js"
 
 function renderModal() {
   const {

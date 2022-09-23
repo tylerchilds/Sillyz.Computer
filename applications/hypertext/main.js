@@ -1,6 +1,5 @@
-import tag from 'https://deno.land/x/tag@v0.3.2/mod.js';
+import { Quill, tag } from "/deps.js"
 
-import Quill from 'https://esm.sh/quill@1.3.7'
 import { customEvents, toolbarOptions } from './designer.js'
 
 const flags = {

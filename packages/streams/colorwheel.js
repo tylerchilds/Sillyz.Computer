@@ -1,5 +1,4 @@
-import tag from 'https://deno.land/x/tag@v0.3.2/mod.js';
-import Color from "https://esm.sh/colorjs.io@0.4.0";
+import { Color, tag } from "/deps.js"
 import { playNote } from "/packages/streams/instrument.js"
 
 const $ = tag('HyperColorWheel', {

@@ -1,4 +1,4 @@
-import tag from 'https://deno.land/x/tag@v0.3.2/mod.js';
+import { tag } from "/deps.js"
 import "/packages/widgets/menu-user.js"
 import "/packages/widgets/menu-resource.js"
 import "/packages/widgets/fantasy-filesystem.js"

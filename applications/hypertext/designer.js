@@ -1,4 +1,4 @@
-import Quill from 'https://esm.sh/quill@1.3.7'
+import { Quill } from "/deps.js"
 
 const SnowTheme = Quill.import('themes/snow');
 
