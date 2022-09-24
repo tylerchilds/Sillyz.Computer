@@ -141,6 +141,7 @@
 	--silver6: hsla(180, 10%, 82%, 1);
 	--silver7: hsla(180, 10%, 98%, 1);
 
+	--theme: dodgerblue;
 	--bg: var(--white);
 	--fg: var(--black);
 

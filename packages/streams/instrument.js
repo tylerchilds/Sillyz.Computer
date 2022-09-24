@@ -1,5 +1,4 @@
 import { tag, listen } from "/deps.js"
-import { showModal, hideModal } from '/packages/ui/modal.js'
 import gamepads from "./gamepad.js"
 
 let Tone;
@@ -82,7 +81,7 @@ const colors = {
   "   xx": [3, 2]
 }
 
-export const octaves = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, -2, -1]
+export const octaves = [3, 4, 5, 6, 7, 8, 9, -2, -1, 0, 1, 2]
 
 let baseOctave = 0
 const eventMap = {
@@ -98,7 +97,6 @@ document.addEventListener('keydown', (event) => {
 let synths = [...Array(12)]
 let once = async () => { once = () => null
   let off
-  showModal(`Audio will be started.`)
   await new Promise((done) => off = listen('click', '*',
     async () => {
       if(off) {
@@ -186,20 +184,12 @@ $.render(() => {
     activeChords,
     activeNotes,
     activeStrums,
-    activeThemes
   } = $.read()
 
   const classes = (i) => `note ${activeStrums[i] ? 'strummed' : ''}`
-  const styles = (i) => {
-    const { foreground, background } = activeThemes[i]
-    return `
-      background: ${background};
-      foreground: ${foreground};
-    `
-  }
 
   return activeChords.map((_chord, i) => `
-    <div class="${classes(i)}" style="${styles(i)}">
+    <div class="${classes(i)}">
       ${activeNotes[i]}
     </div>
   `).join('')
@@ -245,9 +235,7 @@ function toTheme(_$, flags) {
   const { block, inline } = flags
   const x = mod(baseOctave + block, octaves.length);
   const y = mod(inline, notes.length);
-  return {
-    background: `var(--wheel-${x}-${y})`,
-  }
+  return `var(--wheel-${x}-${y})`
 }
 
 function divide(x, n) {
@@ -296,8 +284,7 @@ export function playNote(_$, flags) {
   if(theme) {
     const html = document.querySelector('html')
     html.style = `
-      --bg: ${theme.background};
-      --fg: ${theme.foreground};
+      --theme: ${theme};
     `
   }
 }

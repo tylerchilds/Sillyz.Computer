@@ -20,7 +20,7 @@ const lightnessStops = [
 
 $.write({ colors: recalculate() })
 $.render(() => {
-  const { start, length, reverse, colors } = $.read()
+  const { start, length, reverse, colors, debug } = $.read()
   const wheel = colors.map((lightness, i) => {
     const steps = lightness.map((x) => `
       <button
@@ -52,6 +52,9 @@ $.render(() => {
       :root {
         ${printVariables()}
       }
+      hypercolorwheel form {
+        display: ${debug ? 'block' : 'none'}
+      }
     </style>
   `
 })
@@ -72,7 +75,8 @@ $.style(`
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: repeat(7, 1fr);
-    clip-path: polygon(23% 0%, 50% 100%, 77% 0%);
+    clip-path: polygon(24% 0%, 50% 100%, 76% 0%);
+    gap: 3px;
   }
   & .step {
     border: none;
