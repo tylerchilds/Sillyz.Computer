@@ -278,7 +278,6 @@ export function playNote(_$, flags) {
   const octave = octaves.at(parseInt(mod(block + baseOctave, octaves.length)))
   const now = Tone.now()
 
-  console.log(note, octave)
   synths[index].triggerAttackRelease(`${note}${octave}`, "8n", now);
 
   if(theme) {

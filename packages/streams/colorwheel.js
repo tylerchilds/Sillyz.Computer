@@ -135,4 +135,9 @@ $.on('click', '.step', (event) => {
     index: 0,
     keys: [parseInt(block), parseInt(inline)]
   })
+
+  const html = document.querySelector('html')
+  html.style = `
+    --theme: var(--wheel-${block}-${inline});
+  `
 })
