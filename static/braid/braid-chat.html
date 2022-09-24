@@ -1,0 +1,46 @@
+<!-- hello-chat.html -->
+<braid-chat ref="http://localhost:4323/messages"></braid-chat>
+
+<script type="module">
+  import { tag, signal } from '/deps.js'
+
+  const $ = tag('braid-chat', { name: "Braid User" })
+
+  $.render(target => {
+    const { name, ref } = $.read()
+
+    const messages = signal(target.getAttribute('ref')) || []
+
+    const log = messages.map(({ from, body }) => `
+      <div>${from}: ${body}</div>
+    `).join('')
+
+    return `
+      ${log}
+      <form>
+        <input name="name" value="${name}" />
+        <input name="message" />
+        <button type="submit">Send</button>
+      </form>
+    `
+  })
+
+  $.on('change', '[name="name"]', (event) => {
+    $.write({
+      name: event.target.value
+    })
+  })
+
+  $.on('submit', 'form', (event) => {
+    event.preventDefault()
+    const { name, room } = $.read()
+    const { value } = event.target.message
+
+    const messages = signal(room) || []
+
+    messages.push({
+      from: name,
+      body: value
+    })
+  })
+</script>
