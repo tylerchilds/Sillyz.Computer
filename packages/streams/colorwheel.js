@@ -31,7 +31,7 @@ $.render(() => {
       </button>
     `).join('')
     return `
-      <div class="group" style="transform: rotate(${i * 30}deg)">
+      <div class="group" style="transform: rotate(${i * 45}deg)">
         ${steps}
       </div>
     `
@@ -75,7 +75,7 @@ $.style(`
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: repeat(7, 1fr);
-    clip-path: polygon(24% 0%, 50% 100%, 76% 0%);
+    clip-path: polygon(9% 0%, 50% 100%, 91% 0%);
     gap: 3px;
   }
   & .step {
@@ -95,8 +95,8 @@ function printVariables() {
 function recalculate() {
   const { start, length, reverse } = $.read()
 
-  return [...Array(12)].map((_, hueIndex) => {
-    const step = ((length / 12) * hueIndex)
+  return [...Array(8)].map((_, hueIndex) => {
+    const step = ((length / 8) * hueIndex)
     const hue = reverse
       ? start - step
       : start + step

@@ -81,7 +81,7 @@ const colors = {
   "   xx": [3, 2]
 }
 
-export const octaves = [3, 4, 5, 6, 7, 8, 9, -2, -1, 0, 1, 2]
+export const octaves = [2, 3, 4, 5, 6, -2, -1, 0, 1]
 
 let baseOctave = 0
 const eventMap = {
