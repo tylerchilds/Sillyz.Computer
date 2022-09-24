@@ -75,8 +75,8 @@ $.style(`
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: repeat(7, 1fr);
-    clip-path: polygon(9% 0%, 50% 100%, 91% 0%);
-    gap: 3px;
+    clip-path: polygon(11% 0%, 50% 100%, 89% 0%);
+    gap: 10px;
   }
   & .step {
     border: none;
