@@ -1,10 +1,10 @@
-<!-- hello-chat.html -->
-<braid-chat ref="http://localhost:4323/messages"></braid-chat>
+<!-- braid-chat.html -->
+<braid-chat ref="https://1998.social/public/messages"></braid-chat>
 
 <script type="module">
   import { tag, signal } from '/deps.js'
 
-  const $ = tag('braid-chat', { name: "Braid User" })
+  const $ = tag('braid-chat', { name: "Public" })
 
   $.render(target => {
     const { name, ref } = $.read()
@@ -33,10 +33,11 @@
 
   $.on('submit', 'form', (event) => {
     event.preventDefault()
-    const { name, room } = $.read()
+    const { name } = $.read()
     const { value } = event.target.message
 
-    const messages = signal(room) || []
+    const ref = event.target.closest($.selector).getAttribute('ref')
+    const messages = signal(ref) || []
 
     messages.push({
       from: name,
