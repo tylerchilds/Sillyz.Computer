@@ -1,0 +1,113 @@
+<!-- MIT License -->
+<!-- https://gist.githubusercontent.com/deiu/2c3208c89fbc91d23226/raw/78d21c8f91ec163b3ccc822bafcdbb348ca2d872/webcryptoapi.html -->
+<html>
+<head>
+  <script type="module">
+		import { 
+			generateKey,
+			exportPemKeys,
+			testVerifySig,
+			importPublicKey,
+			importPrivateKey,
+			encryptData,
+			decryptData,
+			arrayBufferToBase64,
+			arrayBufferToText,
+			textToArrayBuffer,
+			signAlgorithm,
+      encryptAlgorithm,
+			signData
+		} from '/packages/lib/crypto.js'
+
+    // Test everything
+    var crypto = window.crypto || window.msCrypto
+    if (crypto.subtle) {
+      var _signedData
+      var _data = "test"
+      var scopeSign = ["sign", "verify"]
+      var scopeEncrypt = ["encrypt", "decrypt"]
+      var vector = crypto.getRandomValues(new Uint8Array(16))
+
+      // Test signature
+      generateKey(signAlgorithm, scopeSign).then(function(pair) {
+        exportPemKeys(pair).then(function(keys) {
+          var title = document.createElement('h2')
+          title.innerHTML = 'Signature'
+          document.querySelector('body').appendChild(title)
+          var divS = document.createElement('div')
+          var divP = document.createElement('div')
+          divS.innerHTML = JSON.stringify(keys.privateKey)
+          divP.innerHTML = JSON.stringify(keys.publicKey)
+          document.querySelector('body').appendChild(divS)
+          document.querySelector('body').appendChild(document.createElement('br'))
+          document.querySelector('body').appendChild(divP)
+          signData(pair.privateKey, _data).then((signedData) => {
+            var sigT = document.createElement('h2')
+            sigT.innerHTML = 'Signature:'
+            document.querySelector('body').appendChild(sigT)
+            var divSig = document.createElement('div')
+            divSig.innerHTML = arrayBufferToBase64(signedData)
+            document.querySelector('body').appendChild(divSig)
+            _signedData = signedData
+            testVerifySig(pair.publicKey, signedData, textToArrayBuffer(_data)).then(function(result) {
+              var verT = document.createElement('h2')
+              verT.innerHTML = 'Signature outcome:'
+              document.querySelector('body').appendChild(verT)
+              var divOut = document.createElement('div')
+              divOut.innerHTML = (result)?'Success':'Failed';
+              document.querySelector('body').appendChild(divOut)
+            })
+          })
+          .then(() => {
+            console.log(_signedData)
+            // load keys and re-check signature
+            importPublicKey(keys.publicKey).then(function(key) {
+              testVerifySig(key, _signedData, textToArrayBuffer(_data)).then(function(result) {
+                console.log("Signature verified after importing PEM public key:", result)
+              })
+            })
+          })
+          // should output `Signature verified: true` twice in the console
+        })
+      })
+      // Test encryption
+      generateKey(encryptAlgorithm, scopeEncrypt).then(function(pair) {
+        var title = document.createElement('h2')
+        title.innerHTML = 'Encryption'
+        document.querySelector('body').appendChild(title)
+        exportPemKeys(pair).then(function(keys) {
+          var title = document.createElement('h2')
+          title.innerHTML = 'Signature'
+          document.querySelector('body').appendChild(title)
+          var divS = document.createElement('div')
+          var divP = document.createElement('div')
+          divS.innerHTML = JSON.stringify(keys.privateKey)
+          divP.innerHTML = JSON.stringify(keys.publicKey)
+          document.querySelector('body').appendChild(divS)
+          document.querySelector('body').appendChild(document.createElement('br'))
+          document.querySelector('body').appendChild(divP)
+        })
+
+        encryptData(vector, pair.publicKey, _data).then(function(encryptedData) {
+          var sigT = document.createElement('h2')
+          sigT.innerHTML = 'Encrypted text:'
+          document.querySelector('body').appendChild(sigT)
+          var divSig = document.createElement('div')
+          divSig.innerHTML = arrayBufferToBase64(encryptedData)
+          document.querySelector('body').appendChild(divSig)
+          decryptData(vector, pair.privateKey, encryptedData).then(function(result) {
+            var verT = document.createElement('h2')
+            verT.innerHTML = 'Encryption outcome:'
+            document.querySelector('body').appendChild(verT)
+            var divOut = document.createElement('div')
+            divOut.innerHTML = (arrayBufferToText(result) === _data)?'Success':'Failed';
+            document.querySelector('body').appendChild(divOut)
+          })
+        })
+      })
+    }
+  </script>
+</head>
+<body></body>
+</html>
+
