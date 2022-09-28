@@ -118,6 +118,19 @@ function recalculate() {
   return colors
 }
 
+
+const eventMap = {
+  37: () => $.write({ start: $.read().start - 45}),
+  39: () => $.write({ start: $.read().start + 45}),
+};
+
+document.addEventListener('keydown', (event) => {
+  const handler = eventMap[event.keyCode] || console.log
+  handler()
+  $.write({ colors: recalculate() })
+});
+
+
 $.on('change', '[type="range"]', (event) => {
   const { value, name } = event.target
 
