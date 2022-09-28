@@ -103,7 +103,7 @@ $.style(`
       position: fixed;
       top: 0;
       bottom: 0;
-      background: rgba(0,0,0,.8);
+      background: rgba(255,255,255,.75);
       z-index: 900;
       overflow-y: auto;
       max-width: 100%;
