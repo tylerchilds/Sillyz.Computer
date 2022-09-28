@@ -1,6 +1,14 @@
 import { tag, focusTrap } from "/deps.js"
 
-function renderModal() {
+const $ = tag('ctx-modal', {
+  label: null,
+  children: null,
+  isOpen: null
+})
+
+export default $
+
+$.render(() => {
   const {
     body,
     isOpen
@@ -20,15 +28,7 @@ function renderModal() {
       ${body}
     </div>
   `
-}
-
-const $ = tag('ctx-modal', {
-  label: null,
-  children: null,
-  isOpen: null
 })
-
-export default $
 
 const context = `<ctx-overlay><ctx-modal></ctx-modal></ctx-overlay>`
 document.body.insertAdjacentHTML("beforeend", context)
@@ -55,8 +55,6 @@ export function hideModal() {
 }
 
 $.on('click', '.close', hideModal)
-
-$.render(renderModal)
 
 $.style(`
   body.overlay {

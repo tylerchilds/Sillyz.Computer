@@ -1,28 +1,52 @@
-/*
-  TODO: There's a bug where this doesn't trigger on secondary toggles so we gotta figure that out
-*/
-import { tag } from "/deps.js"
+import { tag, signal } from "/deps.js"
+import { showDrawer, hideDrawer, byDrawer } from '/packages/ui/drawer.js'
 import { popover } from '/packages/ui/popover.js';
 
-const $ = tag('menu-user')
+const $ = tag('menu-user', { link: 'https://1998.social/~tychi' })
+export default $
+
+const $content = tag('menu-user-content')
+$content.render(() => {
+  const user = $.read()
+  if(!user) return
+
+  return `
+    <img src="${user.pic}" alt="image for ${user.nick}" />
+    <input type="text" name="link" value="${user._link}" />
+    <input type="text" name="nick" value="${user.nick}" />
+    <input type="text" name="pic" value="${user.pic}" />
+    <input type="text" name="color" value="${user.color}" />
+  `
+})
+
+$content.on('blur', 'input', event => {
+  const { value, name } = event.target
+  if(name === 'link') {
+    $.write({ link: value })
+    return
+  }
+
+  signal($.read()._link)[name] = value
+})
 
 function userMenu() {
-  const { content } = $.read()
-  popover(event, `
-    <div class="user-menu-content">
-      ${content}
-    </div>
-  `)
+  const { isOpen } = byDrawer('left')
+
+  isOpen 
+    ? hideDrawer('left')
+    : showDrawer({ position: 'left', body: `
+      <menu-user-content></menu-user-content>
+    `})
 }
 
 $.on('click', 'button', userMenu)
 
 $.render(target => {
-  if(!target.ready) load(target)
-
+  const user = $.read()
+  if(!user) return
   return `
     <button>
-      <img src="https://tychi.me/professional-headshot.jpg" alt="Professional photo of Ty" />
+      <img src="${user.pic}" alt="image for ${user.nick}" />
     </button>
   `
 })
@@ -89,17 +113,6 @@ $.style(`
     }
   }
 `)
-
-// asyncronously load a pane on first render
-async function load(target) {
-  target.ready = true
-  const content = await new Promise(resolve => {
-    resolve(target.innerHTML)
-  })
-
-  console.log(content)
-  $.write({ content })
-}
 
 function activate(){
   console.log('a')
