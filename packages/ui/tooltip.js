@@ -97,7 +97,7 @@ const tooltipStyles = `
     ctx-tooltip.active {
       display: block;
       opacity: 1;
-      z-index: 3;
+      z-index: 1200;
     }
   </style>
 `;

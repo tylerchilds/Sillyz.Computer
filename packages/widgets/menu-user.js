@@ -45,34 +45,23 @@ $.render(target => {
   const user = $.read()
   if(!user) return
   return `
-    <button>
+    <button data-tooltip="Personal Menu">
       <img src="${user.pic}" alt="image for ${user.nick}" />
     </button>
   `
 })
 
 $.style(`
-  & {
-    display: inline-block;
-    position: relative;
-  }
-
   & img {
     border-radius: 100%;
-    width: 40px;
-    height: 40px;
   }
 
   & button {
-    justify-items: start;
-    align-items: center;
-    border: none;
-    display: grid;
-    gap: 12px;
-    grid-template-columns: auto 1fr auto;
-    padding: 0 !important;
-    width: 100% !important;
-    height: auto !important
+    border: .25em solid var(--wheel-1-5);
+    border-radius: 100%;
+    padding: 0;
+    width: 5em;
+    height: 5em;
   }
 
   & a {
