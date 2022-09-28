@@ -1,5 +1,6 @@
-import { Color, tag } from "/deps.js"
+import { Color, tag, signal } from "/deps.js"
 import { playNote } from "/packages/streams/instrument.js"
+import $user from "/packages/widgets/menu-user.js"
 
 const $ = tag('HyperColorWheel', {
   colors: [],
@@ -49,9 +50,6 @@ $.render(() => {
       <label for="reverse">Reverse</label>
     </form>
     <style>
-      :root {
-        ${printVariables()}
-      }
       hypercolorwheel form {
         display: ${debug ? 'block' : 'none'}
       }
@@ -85,8 +83,7 @@ $.style(`
   }
 `)
 
-function printVariables() {
-  const { colors } = $.read()
+function print(colors) {
   return colors.flatMap(x => x).map(({ name, value }) => `
     ${name}: ${value};
   `).join('')
@@ -95,7 +92,7 @@ function printVariables() {
 function recalculate() {
   const { start, length, reverse } = $.read()
 
-  return [...Array(8)].map((_, hueIndex) => {
+  const colors = [...Array(8)].map((_, hueIndex) => {
     const step = ((length / 8) * hueIndex)
     const hue = reverse
       ? start - step
@@ -115,6 +112,10 @@ function recalculate() {
       }
     })
   })
+
+  if($user.read()._link) signal($user.read()._link).colorVariables = print(colors)
+
+  return colors
 }
 
 $.on('change', '[type="range"]', (event) => {
