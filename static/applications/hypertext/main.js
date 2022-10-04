@@ -3,7 +3,7 @@ import { Quill, tag } from "/deps.js"
 import { customEvents, toolbarOptions } from './designer.js'
 
 const flags = {
-  fid: window.location.protocol + '//' + window.location.host + '/ffs' + window.location.pathname
+  fid: 'https://1998.social/ffs' + window.location.pathname
 }
 
 const $ = tag('hypertext')
@@ -11,15 +11,12 @@ $.render(wysiwyg)
 export default $
 
 async function download(target, $, flags) {
-  const value = await fetch(flags.fid)
-    .then(res => {
-      if(res.status !== 200) throw new Error()
-      return res.text()
-    })
-    .catch(console.log)
+  const { val={} } = (
+    await new Promise(res => bus.get_once(flags.fid, res))
+  ) || {}
 
   target.quill.setContents({})
-  target.quill.clipboard.dangerouslyPasteHTML(0, value || "<p><highlighter><em>What's on your mind...<em></highlighter></p><p>Tell me...</p>");
+  target.quill.clipboard.dangerouslyPasteHTML(0, val.file || "<p><highlighter><em>What's on your mind...<em></highlighter></p><p>Tell me...</p>");
 }
 
 function wysiwyg(target) {

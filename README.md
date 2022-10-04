@@ -6,7 +6,7 @@
 2. Start the project:
 
 ```
-deno run -A --unstable --watch=errors/,pages,/packages/,static/ server.js
+deno task start
 ```
 Note: This will watch the project directories and restart as necessary.
 

@@ -1,7 +1,7 @@
-import { tag, read } from "/deps.js"
+import { tag, signal, read } from "/deps.js"
 
 const flags = {
-  fid: window.location.protocol + '//' + window.location.host + '/ffs' + window.location.pathname
+  fid: 'https://1998.social/ffs' + window.location.pathname
 }
 
 const $ = tag('fantasy-filesystem')
@@ -34,7 +34,7 @@ $.on('submit', 'form', (event) => {
   const { secret } = $.read()
   const content = getContents(event.target)
 
-  upload('save', content)
+  upload(content)
 })
 
 function getContents(target) {
@@ -55,20 +55,10 @@ function contentsByType(model, data) {
   return lookup(data)
 }
 
-async function upload(mode, value) {
+function upload(value) {
   if(value) {
-    const response = await fetch(flags.fid, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        mode,
-        value
-      })
-    });
-
-    console.log(response)
+    bus.state[flags.fid] = {
+      file: value
+    }
   }
 }

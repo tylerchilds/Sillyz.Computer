@@ -9,10 +9,6 @@ import "/packages/tags/variable-text.js"
 import "/packages/ui/tooltip.js"
 import "/packages/streams/colorwheel.js"
 
-const flags = {
-  fid: window.location.protocol + '//' + window.location.host + '/ffs' + window.location.pathname
-}
-
 const $ = tag('hyperspacetime')
 
 $.render(() => {
