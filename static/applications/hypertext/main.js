@@ -16,7 +16,7 @@ async function download(target, $, flags) {
   ) || {}
 
   target.quill.setContents({})
-  target.quill.clipboard.dangerouslyPasteHTML(0, val.file || "<p><highlighter><em>What's on your mind...<em></highlighter></p><p>Tell me...</p>");
+  target.quill.clipboard.dangerouslyPasteHTML(0, (val && val.file) || "<p><highlighter><em>What's on your mind...<em></highlighter></p><p>Tell me...</p>");
 }
 
 function wysiwyg(target) {
