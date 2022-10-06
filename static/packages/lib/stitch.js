@@ -1,7 +1,7 @@
 import { tag } from "/deps.js"
 
 export function stitch(plugins = []) {
-  plugins.map(url => import(url).then(({plugin}) => load(plugin())))
+  plugins.map(url => fetch(url).then(res => res.json()).then(load))
 }
 
 function load(manifest = {}) {
