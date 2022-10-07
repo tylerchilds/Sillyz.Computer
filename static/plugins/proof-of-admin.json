@@ -1,7 +1,7 @@
 {
   "name": "proof-of-admin",
   "render": {
-    "_link": "http://localhost:1998/files/compositors/hello.js"
+    "_link": "/compositors/proof-of-admin.js"
   },
   "styles": {
     "with": [{

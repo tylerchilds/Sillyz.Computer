@@ -11,12 +11,12 @@ $.render(wysiwyg)
 export default $
 
 async function download(target, $, flags) {
-  const { val={} } = (
+  const { val } = (
     await new Promise(res => bus.get_once(flags.fid, res))
   ) || {}
 
   target.quill.setContents({})
-  target.quill.clipboard.dangerouslyPasteHTML(0, (val && val.file) || "<p><highlighter><em>What's on your mind...<em></highlighter></p><p>Tell me...</p>");
+  target.quill.clipboard.dangerouslyPasteHTML(0, (val) || "<p><highlighter><em>What's on your mind...<em></highlighter></p><p>Tell me...</p>");
 }
 
 function wysiwyg(target) {

@@ -57,8 +57,6 @@ function contentsByType(model, data) {
 
 function upload(value) {
   if(value) {
-    bus.state[flags.fid] = {
-      file: value
-    }
+    bus.state[flags.fid] = value
   }
 }
