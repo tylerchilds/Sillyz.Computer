@@ -9,10 +9,10 @@ export function compositor(target, $, flags) {
   return `
     <form>
       <fieldset><legend>No Code Demo</legend>
-        ${name}
+        plugin: ${name}
         <h2>Render</h2>
         <label for="compositor">Compositor:</label>
-        <input type="text" value="${render._link}" />
+        <input type="text" value="${render._link}" /><br/>
         <br/>
         <live-code src="https://1998.social${render._link}"></live-code>
         <hr/>
@@ -27,11 +27,11 @@ function renderEvents(list) {
   return list.map((args, i) => {
     return `
       <label>type</label>
-      <input type="text" value="${args.type}" />
+      <input type="text" value="${args.type}" /><br/>
       <label>is</label>
-      <input type="text" value="${args.is}" />
+      <input type="text" value="${args.is}" /><br/>
       <label>macro</label>
-      <input type="text" value="${args._link}" />
+      <input type="text" value="${args._link}" /><br/>
       <live-code src="https://1998.social${args._link}"></live-code>
     `
   }).join('')
