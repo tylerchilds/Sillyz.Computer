@@ -1,18 +1,18 @@
 {
   "name": "proof-of-concept",
   "render": {
-    "_link": "http://localhost:1998/files/compositors/hello.js"
+    "_link": "/files/compositors/hello.js"
   },
   "styles": {
     "with": [{
-      "_link": "http://localhost:1998/files/styles/hello.json"
+      "_link": "/files/styles/hello.json"
     }]
   },
   "events": {
     "with": [{
       "type": "click",
       "is": "button",
-      "_link": "http://localhost:1998/files/macros/hello.js"
+      "_link": "/files/macros/hello.js"
     }]
   }
 }
