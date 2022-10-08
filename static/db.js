@@ -1,8 +1,7 @@
 import '/deps.js'
-bus.state['https://1998.social/files/compositors/hello.js'] = { file:`
-export function compositor(target, $, flags) {
+bus.state['https://1998.social/files/compositors/hello.js'] = { file:`export function compositor(target, $, flags) {
 
-return '<button>click</button>'
+  return '<button>click</button>'
 
 }`}
 
@@ -20,11 +19,11 @@ stitch([
 ])</script>
 `}
 
-bus.state['https://1998.social/files/macros/hello.js'] = { file: `
-export function macro(event, $, flags) {
+bus.state['https://1998.social/files/macros/hello.js'] = { file: `export function macro(event, $, flags) {
+
   alert('clicked')
-}
-`}
+
+}`}
 
 bus.state['https://1998.social/files/plugins/no-code.json'] = {
   file: {
