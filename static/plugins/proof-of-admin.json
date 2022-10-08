@@ -10,9 +10,9 @@
   },
   "events": {
     "with": [{
-      "type": "click",
-      "is": "button",
-      "_link": "/files/macros/hello.js"
+      "type": "change",
+      "is": ".events input",
+      "_link": "/macros/macro-bindings.js"
     }]
   }
 }

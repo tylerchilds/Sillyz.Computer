@@ -17,7 +17,9 @@ export function compositor(target, $, flags) {
         <live-code src="https://1998.social${render._link}"></live-code>
         <hr/>
         <h2>Events</h2>
-        ${renderEvents(events.with)}
+        <div class="events">
+          ${renderEvents(events.with)}
+        </div>
       </fieldset>
     </form>
   `
@@ -27,11 +29,11 @@ function renderEvents(list) {
   return list.map((args, i) => {
     return `
       <label>type</label>
-      <input type="text" value="${args.type}" /><br/>
+      <input type="text" name="type" data-index="${i}" value="${args.type}" /><br/>
       <label>is</label>
-      <input type="text" value="${args.is}" /><br/>
+      <input type="text" name="is" data-index="${i}" value="${args.is}" /><br/>
       <label>macro</label>
-      <input type="text" value="${args._link}" /><br/>
+      <input type="text" name="_link" data-index="${i}" value="${args._link}" /><br/>
       <live-code src="https://1998.social${args._link}"></live-code>
     `
   }).join('')
