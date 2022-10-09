@@ -14,7 +14,7 @@ export const handler = async (_request, context) => {
         if(!file) throw new Error();
         if(extname(pathname) === '.json') return JSON.stringify(file);
         return file;
-      }).catch(console.error)
+      })
   ]
 
   for (const promise of cascade) {
