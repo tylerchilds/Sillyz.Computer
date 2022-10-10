@@ -10,7 +10,7 @@ const $ = tag('live-code')
 
 $.render(target => {
   const link = target.getAttribute('src')
-  const data = bus.state[link]
+  const data = bus.state[link] || {}
 
   if(!data.file) return
 
@@ -41,7 +41,7 @@ function persist(target, $, { link }) {
 	return (update) => {
     if(update.changes.inserted.length < 0) return
 
-    const data = bus.state[link]
+    const data = bus.state[link] || {}
 		const file = update.view.state.doc.toString()
     bus.state[link] = {
       ...data,

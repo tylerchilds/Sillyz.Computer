@@ -1,5 +1,6 @@
 import { signal } from '/deps.js'
 import '/packages/tags/live-code.js';
+import '/packages/tags/chalect-bar.js';
 
 export function compositor(target, $, flags) {
   const plugin = target.getAttribute('plugin')
@@ -7,7 +8,7 @@ export function compositor(target, $, flags) {
   const { name, render, styles, events } = signal(plugin).file
 
   return `
-    <form>
+    <div>
       <fieldset><legend>No Code Demo</legend>
         plugin: ${name}
         <h2>Render</h2>
@@ -18,18 +19,22 @@ export function compositor(target, $, flags) {
         <hr/>
         <h2>Events</h2>
         <div class="events">
-          ${renderEvents(events.with)}
+          ${renderEvents(plugin, events.with)}
         </div>
       </fieldset>
-    </form>
+    </div>
   `
 }
 
-function renderEvents(list) {
+function renderEvents(plugin, list) {
   return list.map((args, i) => {
+    const basePath = `file.events.with[${i}]`
     return `
-      <label>type</label>
-      <input type="text" name="type" data-index="${i}" value="${args.type}" /><br/>
+      <chalect-bar
+        src="${plugin}#${basePath}.type"
+        options="https://1998.social/enums/events"
+        label="type"
+      ></chalect-bar><br/>
       <label>is</label>
       <input type="text" name="is" data-index="${i}" value="${args.is}" /><br/>
       <label>macro</label>

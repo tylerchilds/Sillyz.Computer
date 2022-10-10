@@ -21,7 +21,7 @@ function load(manifest = {}) {
       import(x._link)
         .then(({ macro }) => {
           const { is, type } = manifest.events.with[i]
-          $.on(type, is, (event) => macro(event, $, flags))
+          $.on(type[0].value, is, (event) => macro(event, $, flags))
         })
     })
   }

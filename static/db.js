@@ -13,10 +13,11 @@ bus.state['https://1998.social/files/no-code.html'] = { file: `
 
 <script type='module'>
   import {stitch} from '/packages/lib/stitch.js';
-stitch([
-  '/files/plugins/no-code.json',
-  '/plugins/proof-of-admin.json'
-])</script>
+  stitch([
+    '/files/plugins/no-code.json',
+    '/plugins/proof-of-admin.json'
+  ])
+</script>
 `}
 
 bus.state['https://1998.social/files/macros/hello.js'] = { file: `export function macro(event, $, flags) {
@@ -53,3 +54,9 @@ bus.state['https://1998.social/files/proof-of-concept.html'] = { file: `
     stitch(['/plugins/proof-of-concept.json'])
   </script>
 `}
+
+fetch('/enums/events')
+  .then(x => x.json())
+  .then(enums =>
+    bus.state['https://1998.social/enums/events'] = { enums }
+  )
