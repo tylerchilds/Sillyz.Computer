@@ -10,7 +10,7 @@
   },
   "events": {
     "with": [{
-      "type": "change",
+      "type": [{"id": "change", "value": "change"}],
       "is": ".events input",
       "_link": "/macros/macro-bindings.js"
     }]

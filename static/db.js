@@ -39,7 +39,7 @@ bus.state['https://1998.social/files/plugins/no-code.json'] = {
     },
     "events": {
       "with": [{
-        "type": "click",
+        "type": [{id: "click", value: "click"}],
         "is": "button",
         "_link": "/files/macros/hello.js"
       }]
