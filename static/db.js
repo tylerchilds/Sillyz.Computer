@@ -5,20 +5,35 @@ bus.state['https://1998.social/files/compositors/hello.js'] = { file:`export fun
 
 }`}
 
-bus.state['https://1998.social/files/no-code.html'] = { file: `
-<div style="display: grid; grid-template-columns: 1fr 1fr;">
-  <no-code></no-code>
-  <proof-of-admin plugin="https://1998.social/files/plugins/no-code.json"></proof-of-admin>
-</div>
+bus.state['https://1998.social/files/no-code.html'] = {
+  label: 'World',
+  file: `
+    <div style="display: grid; grid-template-columns: 1fr 1fr;">
+      <no-code></no-code>
+      <proof-of-admin plugin="https://1998.social/files/plugins/no-code.json"></proof-of-admin>
+    </div>
 
-<script type='module'>
-  import {stitch} from '/packages/lib/stitch.js';
-  stitch([
-    '/files/plugins/no-code.json',
-    '/plugins/proof-of-admin.json'
-  ])
-</script>
-`}
+    <script type='module'>
+      import {stitch} from '/packages/lib/stitch.js';
+      alert('ok')
+      stitch([
+        '/files/plugins/no-code.json',
+        '/plugins/proof-of-admin.json'
+      ])
+    </script>
+  `
+}
+
+bus.state['https://1998.social/files/hypercolorwheel.html'] = {
+  label: 'World',
+  file: `
+    <link href="/styles/system.css" rel="stylesheet">
+    <design-system></design-system>
+    <hypercolorwheel></hypercolorwheel>
+    <script type="module" src="/packages/tags/design-system.js"></script>
+    <script type="module" src="/packages/streams/colorwheel.js"></script>
+  `
+}
 
 bus.state['https://1998.social/files/macros/hello.js'] = { file: `export function macro(event, $, flags) {
 
@@ -47,6 +62,40 @@ bus.state['https://1998.social/files/plugins/no-code.json'] = {
   }
 }
 
+bus.state['https://1998.social/loloco/hello'] = {
+  _link: 'https://1998.social/loloco/hello',
+  label: 'Hello',
+  lists: [
+    {
+      label: 'World',
+      items: [
+        {
+          alt: 'Loloco',
+          src: '/files/hypercolorwheel.html',
+        },
+        {
+          alt: 'No Code',
+          src: '/files/no-code.html',
+        },
+      ]
+    },
+    {
+      label: 'World',
+      items: [
+        {
+          alt: 'Loloco',
+          src: '/files/hypercolorwheel.html',
+        },
+        {
+          alt: 'No Code',
+          src: '/files/no-code.html',
+        },
+      ]
+    }
+
+  ]
+}
+
 bus.state['https://1998.social/files/proof-of-concept.html'] = { file: `
   <proof-of-concept></proof-of-concept>
   <script type='module'>
@@ -59,4 +108,10 @@ fetch('/enums/events')
   .then(x => x.json())
   .then(enums =>
     bus.state['https://1998.social/enums/events'] = { enums }
+  )
+
+fetch('/enums/post-types')
+  .then(x => x.json())
+  .then(enums =>
+    bus.state['https://1998.social/enums/post-types'] = { enums }
   )

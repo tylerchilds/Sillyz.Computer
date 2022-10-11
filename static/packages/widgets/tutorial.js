@@ -3,12 +3,13 @@ import "/packages/tags/variable-text.js"
 import "/packages/tags/highlighter.js"
 import "/packages/tags/rainbow-button.js"
 
-import "/packages/streams/colorwheel.js"
-
 const $ = tag('tutorial')
 
 $.on('click', '.start', () => {
-  $.write({ html: '<HyperColorWheel></HyperColorWheel>' })
+  $.write({ html: `
+    <loloco link="https://1998.social/loloco/hello"></loloco>
+    <script type="module" src="/packages/widgets/loloco.js"></script>
+  ` })
 })
 
 $.render(() => {
