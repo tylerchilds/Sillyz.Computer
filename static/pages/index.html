@@ -12,11 +12,21 @@
 html {
   background: var(--theme, var(--wheel-5-3));
 }
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3rem;
+  background: linear-gradient(rgba(0,0,0, .5), transparent);
+  z-index: 1000;
+}
 </style>
     <design-system></design-system>
   </head>
   <body>
-
     <main id="main">
       <tutorial></tutorial>
       <script type="module" src="/packages/widgets/tutorial.js"></script>

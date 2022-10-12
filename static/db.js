@@ -62,15 +62,15 @@ bus.state['https://1998.social/files/plugins/no-code.json'] = {
   }
 }
 
-bus.state['https://1998.social/loloco/hello'] = {
-  _link: 'https://1998.social/loloco/hello',
+bus.state['https://1998.social/rolodex/hello'] = {
+  _link: 'https://1998.social/rolodex/hello',
   label: 'Hello',
   lists: [
     {
-      label: 'World',
+      label: 'Widgets',
       items: [
         {
-          alt: 'Loloco',
+          alt: 'Color Wheel',
           src: '/files/hypercolorwheel.html',
         },
         {
@@ -80,10 +80,10 @@ bus.state['https://1998.social/loloco/hello'] = {
       ]
     },
     {
-      label: 'World',
+      label: 'Plugins',
       items: [
         {
-          alt: 'Loloco',
+          alt: 'Color Wheel',
           src: '/files/hypercolorwheel.html',
         },
         {

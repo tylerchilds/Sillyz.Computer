@@ -148,106 +148,6 @@ body {
   position: relative;
 }
 
-menu-resource {
-  position: fixed;
-  right: 1em;
-  bottom: 1em;
-  z-index: 1000;
-}
-
-menu-user {
-  position: fixed;
-  left: 1em;
-  bottom: 1em;
-  z-index: 1000;
-}
-
-
-:focus {
-	outline: var(--focus-outline);
-	outline-offset: var(--focus-outline-offset);
-}
-h2,
-h3,
-h4,
-h5,
-h6 {
-	font-family: var(--font-heading);
-	margin: 1rem 0;
-}
-
-h1 {
-	font-size: 4rem;
-	font-weight: 700;
-	line-height: 1.1rem;
-	margin-bottom: 2rem;
-}
-
-h2 {
-	font-size: 3rem;
-	line-height: 1.1rem;
-}
-
-h3 {
-	font-size: 3rem;
-	font-weight: 700;
-	line-height: 1.1rem;
-}
-
-h4 {
-	font-size: 2rem;
-	font-weight: 700;
-}
-
-h5 {
-	font-weight: 700;
-}
-
-p {
-	margin-bottom: 1rem;
-}
-
-form {
-	margin: 1rem 0;
-}
-
-pre,
-code,
-samp,
-kbd {
-	font-size: var(--font-size);
-	color: var(--color-primary-shade1);
-	font-family: var(--font-mono);
-	line-height: 1;
-}
-
-code,
-samp,
-kbd {
-	border-radius: var(--border-radius);
-	overflow-y: hidden;
-	overflow-x: auto;
-	padding: .25rem;
-}
-
-pre {
-	border-radius: var(--border-radius);
-	line-height: var(--line-height);
-	overflow-y: hidden;
-	overflow-x: auto;
-	padding: .5rem;
-	margin: 0 0 1rem;
-}
-
-pre code,
-pre samp,
-pre kbd {
-	background-color: transparent;
-	border: none;
-	border-radius: 0;
-	padding: 0;
-}
-
 a:link {
 	color: var(--color-link);
 }
@@ -272,157 +172,18 @@ svg{
 	max-width: 100%;
 	vertical-align: top;
 }
-
-hr {
-	height: 2rem;
-	margin-bottom: 1rem;
-	position: relative;
+menu-resource {
+  position: fixed;
+  right: 1em;
+  top: 1em;
+  z-index: 1000;
 }
 
-hr::before {
-	background-color: var(--color-neutral-tint1);
-	content: '';
-	height: 1px;
-	left: 0;
-	position: absolute;
-	top: 50%;
-	width: 100%;
-}
-
-ol,
-ul {
-	margin: 0 0 1em 1em;
-}
-
-ol {
-	list-style-type: decimal;
-}
-
-ol ol {
-	margin-bottom: 0;
-}
-
-ul {
-	list-style-type: disc;
-}
-
-ul ul {
-	margin-bottom: 0;
-}
-
-dt {
-	font-style: italic;
-}
-
-dd {
-	margin-left: 1em;
-}
-
-blockquote {
-	margin: 0 0 1em .5em;
-	border-left: .25em solid var(--color-neutral-tint1);
-	padding: .125em .5em;
-}
-
-blockquote p:last-child {
-	margin-bottom: 0;
-}
-
-figure {
-	margin: 0 auto 1rem;
-}
-
-small,
-sub,
-sup,
-caption,
-figcaption {
-	font-size: .75rem;
-	vertical-align: top;
-}
-
-sub,
-sup {
-	position: relative;
-}
-
-sub {
-	top: .25rem;
-}
-
-sup {
-	bottom: .25rem;
-}
-
-caption,
-figcaption {
-	font-style: italic;
-	text-align: center;
-}
-
-rem,
-cite,
-i {
-	font-style: italic;
-}
-
-strong,
-var,
-b {
-	font-weight: bold;
-}
-
-q::before {
-	content: "'";
-}
-
-q::after {
-	content: "'";
-}
-
-q > q {
-	font-style: italic;
-}
-
-dfn,
-abbr {
-	border-bottom: 1px dotted var(--color-neutral-shade2);
-	cursor: default;
-}
-
-table {
-	border-radius: var(--border-radius);
-	border-collapse: separate;
-	border-spacing: 0;
-	margin-bottom: 1rem;
-	width: 100%;
-}
-
-table th {
-	text-align: left;
-}
-
-table th,
-table td {
-	padding: 0 .25rem;
-}
-
-input,
-label,
-select,
-button,
-textarea {
-	color: var(--color-neutral-shade4);
-	display: block;
-	padding: .5rem;
-	resize: none;
-	-webkit-appearance: none;
-	-moz-appearance: none;
-}
-
-label {
-	color: var(--color-neutral-shade1);
-	padding: 0;
+menu-user {
+  position: fixed;
+  left: 1em;
+  top: 1em;
+  z-index: 1000;
 }
 
 .button {
@@ -678,3 +439,4 @@ label {
 	clip: rect(1px, 1px, 1px, 1px);
 	white-space: nowrap; /* added line */
 }
+
