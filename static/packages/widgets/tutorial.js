@@ -83,7 +83,6 @@ $.style(`
    grid-area: skybox;
    opacity: 1;
    transform: translate(0, 0) rotateX(0) rotateY(0) scale(1);
-   mix-blend-mode: difference;
  }
 
  & .a {
