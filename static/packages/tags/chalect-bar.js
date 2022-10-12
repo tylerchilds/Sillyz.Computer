@@ -57,7 +57,7 @@ $.render(target => {
 
   return `
     <button class="bar">
-      ${args.label}: ${choices.map(x => x.value).join(', ')}
+      ${args.label ? args.label : ''} ${choices.map(x => x.value).join(', ')}
     </button>
 
     <div class="filterable-list">

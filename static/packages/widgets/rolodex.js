@@ -1,26 +1,26 @@
 import { tag, signal } from "/deps.js"
+import '/packages/tags/chalect-bar.js';
 import $user from "/packages/widgets/menu-user.js"
 
 const $ = tag('rolodex')
 $.render(target => {
   const {
     _link,
-    rolodex = {},
+    rolodex = [],
   } = $user.read()
 
-  const {
-    label,
-    lists
-  }  = signal(rolodex.value) || {}
-
-  if(!label) return
+  const lists = rolodex
+    .map(({ value }) => (signal(value) || {}))
+    .reduce((all, x) => {
+      if(x.lists) {
+        const lists = Object.assign([], x.lists);
+        all = [...all, ...lists]
+      }
+      return all
+    }, [])
 
   return `
     <div style="max-width: 70ch; margin: auto;">
-      <chalect-bar
-        src="${_link}#rolodex"
-        options="${_link}#collections"
-      ></chalect-bar>
       ${renderLists(lists)}
     </div>
   `
@@ -38,9 +38,9 @@ function renderLists(lists = []) {
 }
 
 function renderItems(items = []) {
-  return items.map(({alt, src }) => {
+  return items.map(({alt, src }, i) => {
     return `
-      <div class="item" style="aspect-ratio: 1/1; max-inline-size: 100; margin: auto;">
+      <div class="item ${i===0 ?'slide-in':''}">
 				<iframe
 					title="${alt}"
 					sandbox="allow-scripts allow-same-origin"
@@ -55,18 +55,85 @@ function renderItems(items = []) {
 $.style(`
   & {
     display: block;
+    height: 100%;
   }
 
   & .list {
+    aspect-ratio: 1/1;
     position: relative;
-		display: flex;
-		scroll-snap-type: x mandatory;
-		margin-bottom: 10px;
-		max-width: 400px;
-		overflow-x: scroll;
+		display: grid;
+    grid-template-areas: 'stage';
 	}
 
-	& .item {
-		scroll-snap-align: start;
-	}
+  & .item {
+    grid-area: stage;
+    background: white;
+    box-sizing: border-box;
+    overflow: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    pointer-events: none;
+    --size-small: scale(1);
+    --size-normal: scale(1);
+    --offset-right: translate(0, 0);
+    --offset-none: translate(0, 0);
+    --offset-left: translate(0, 0);
+    transform: var(--size-small) var(--offset-right);
+  }
+
+
+  & .item.slide-in {
+    --offset-direction: var(--offset-right);
+    animation: &-slide 500ms ease-in-out forwards;
+  }
+
+  & .item.slide-out {
+    --offset-direction: var(--offset-left);
+    animation: &-slide 500ms ease-in-out reverse forwards;
+  }
+
+  & .item.slide-in-back {
+    --offset-direction: var(--offset-left);
+    animation: &-slide 500ms ease-in-out forwards;
+  }
+
+  & .item.slide-out-back {
+    --offset-direction: var(--offset-right);
+    animation: &-slide 500ms ease-in-out reverse forwards;
+  }
+
+  @keyframes &-slide {
+    0% {
+      transform:
+        var(--size-small)
+        var(--offset-direction);
+      opacity: 0;
+      filter: blur(3px);
+    }
+
+    33% {
+      transform:
+        var(--size-small)
+        var(--offset-direction);
+    }
+
+    66% {
+      transform:
+        var(--size-small)
+        var(--offset-none);
+    }
+
+    100% {
+      transform:
+        var(--size-normal)
+        var(--offset-none);
+      opacity: 1;
+      pointer-events: initial;
+      filter: blur(0);
+    }
+  }
 `)
