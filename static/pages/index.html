@@ -27,17 +27,29 @@ body::before {
     <design-system></design-system>
   </head>
   <body>
+    <header>
+      <menu-user></menu-user>
+      <menu-resource model="hypertext" view="fantasy-filesystem"></menu-resource>
+    </header>
     <main id="main">
       <tutorial></tutorial>
       <script type="module" src="/packages/widgets/tutorial.js"></script>
     </main>
     <footer>
-      <menu-user></menu-user>
-      <menu-resource model="hypertext" view="fantasy-filesystem"></menu-resource>
+      <button class="interface-button bl" data-tooltip="Can I create?">+</button>
+      <chalect-bar
+        class="interface-bar"
+        placement="above"
+        strict="true"
+        src="currentUser#rolodex"
+        options="currentUser#collections"
+      ></chalect-bar>
+      <button class="interface-button br" data-tooltip="Can I remix?">Y</button>
     </footer>
 		<script type="module" src="/packages/tags/design-system.js"></script>
 		<script type="module" src="/packages/widgets/menu-user.js"></script>
 		<script type="module" src="/packages/widgets/menu-resource.js"></script>
+		<script type="module" src="/packages/tags/chalect-bar.js"></script>
 
 		<script type="module" src="/packages/widgets/fantasy-filesystem.js"></script>
   </body>

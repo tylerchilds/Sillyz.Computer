@@ -1,4 +1,5 @@
 import { tag, signal, focusTrap } from '/deps.js'
+import $user from "/packages/widgets/menu-user.js"
 import set from 'https://esm.sh/lodash@4.17.21/set'
 import get from 'https://esm.sh/lodash@4.17.21/get'
 
@@ -10,7 +11,9 @@ $.on('click', '.item', function update(event) {
   event.preventDefault();
   const { id } = event.target.dataset
   const args = attributes(event.target, $)
-  const state = { ...bus.cache[args.resource].val }
+  const resource = currentResource(args.resource)
+
+  const state = { ...bus.cache[resource].val }
 
   const { enums = [] }  = signal(args.options) || {}
 
@@ -21,7 +24,7 @@ $.on('click', '.item', function update(event) {
 
   set(state, args.path, [value])
 
-  bus.state[args.resource] = state
+  bus.state[resource] = state
 
 		args.root.trap.deactivate();
 })
@@ -43,7 +46,7 @@ $.render(target => {
   const { filter } = $.read()
 
   const { enums = [] }  = signal(args.options) || {}
-  const data  = signal(args.resource) || {}
+  const data  = signal(currentResource(args.resource)) || {}
 
   const choices = get(data, args.path, [])
 
@@ -55,20 +58,24 @@ $.render(target => {
       </button>
     `).join('')
 
+  const maybeCustomOption = args.strict ? '' : `
+    <button class="item" data-id="${filter}">
+      ${filter}
+    </button>
+  `
+
   return `
     <button class="bar">
       ${args.label ? args.label : ''} ${choices.map(x => x.value).join(', ')}
     </button>
 
-    <div class="filterable-list">
+    <div class="filterable-list ${args.placement}">
       <div class="filter-area">
         <input type="text" name="filter" placeholder="Search" value="${filter}" />
       </div>
       <div class="list">
         ${list}
-				<button class="item" data-id="${filter}">
-					${filter}
-				</button>
+        ${maybeCustomOption}
       </div>
     </div>
   `
@@ -84,15 +91,23 @@ function attributes(node, $) {
 		root: target,
     options: target.getAttribute('options'),
     label: target.getAttribute('label'),
+    placement: target.getAttribute('placement') || '',
+    strict: target.getAttribute('strict') === 'true',
     resource,
     path
   }
 }
 
+function currentResource(resource) {
+  return resource === 'currentUser'
+    ? $user.read()._link
+    : resource
+}
+
 function toggleActive(event) {
   const args = attributes(event.target, $)
 
-	if(args.root.matches('.is-active')) {
+	if(isActive(args.root)) {
 		args.root.trap.deactivate();
 	} else {
 		args.root.trap.activate();
@@ -118,46 +133,60 @@ function onDeactivate(target) {
 		$.write({ filter: '' })
   }
 }
+
+function isActive(target) {
+  return target.matches('.is-active')
+}
+
 $.style(`
 	& {
-		display: inline-block;
+		display: block;
 		position: relative;
 		z-index: 3;
+    width: 100%;
 	}
 
 	& .filter-area {
-		display: grid;
-		grid-template-columns: auto 1fr;
-		align-items: center;
+    margin: .5rem;
 	}
 
 	& .bar {
 		white-space: nowrap;
+		background: rgba(255,255,255,.85);
+    width: 100%;
 	}
 
 	&.is-active .bar {
-		background: blue;
+    border-color: var(--wheel-1-5);
 	}
 	& .bar:hover,
 	& .bar:focus {
-		border-color: blue;
 	}
 
 	& [name="filter"] {
-		background: transparent;
+		background: white;
 		border: none;
 		width: 100%;
+    display: block;
 	}
 
 	& .filterable-list {
-		background: white;
+    background: white;
 		display: none;
 		position: absolute;
+    width: 100%;
 	}
 
 	&.is-active .filterable-list {
-		display: block;
+		display: flex;
+    flex-direction: column;
 	}
+
+  & .filterable-list.above {
+    top: 0;
+    transform: translateY(-100%);
+    flex-direction: column-reverse;
+  }
 
 	& .item {
 		background: transparent;
@@ -182,6 +211,6 @@ $.style(`
 
 	& .item:hover,
 	& .item:focus {
-		background: blue;
+		background: linear-gradient(rgba(0,0,0,0) 75%, rgba(0,0,0,.25));
 	}
 `)

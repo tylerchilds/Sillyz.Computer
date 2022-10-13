@@ -21,25 +21,8 @@ $.on('click', 'button', resourceMenu)
 
 $.render(target => {
   return `
-    <button data-tooltip="Meta Menu">
+    <button class="interface-button tr" data-tooltip="What is this?">
       ?
     </button>
   `
 })
-
-
-$.style(`
-  & img {
-    border-radius: 100%;
-  }
-
-  & button {
-    display: grid;
-    place-items: center;
-    border: .25em solid var(--wheel-1-5);
-    border-radius: 100%;
-    padding: 0;
-    width: 5em;
-    height: 5em;
-  }
-`)

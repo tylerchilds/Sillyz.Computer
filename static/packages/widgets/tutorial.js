@@ -2,16 +2,13 @@ import { tag } from "/deps.js"
 import "/packages/tags/variable-text.js"
 import "/packages/tags/highlighter.js"
 import "/packages/tags/rainbow-button.js"
-import { setToolbar } from "/packages/ui/toolbar.js"
 
 const $ = tag('tutorial')
 
 $.on('click', '.start', () => {
-  setToolbar('<rolodex-tools></rolodex-tools>')
   $.write({ html: `
     <rolodex></rolodex>
     <script type="module" src="/packages/widgets/rolodex.js"></script>
-    <script type="module" src="/packages/widgets/rolodex-tools.js"></script>
   ` })
 })
 

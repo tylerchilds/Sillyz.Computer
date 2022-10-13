@@ -45,25 +45,13 @@ $.render(target => {
   const user = $.read()
   if(!user) return
   return `
-    <button data-tooltip="Personal Menu">
+    <button class="interface-button tl" data-tooltip="Who am I?">
       <img src="${user.pic}" alt="image for ${user.nick}" />
     </button>
   `
 })
 
 $.style(`
-  & img {
-    border-radius: 100%;
-  }
-
-  & button {
-    border: .25em solid var(--wheel-1-5);
-    border-radius: 100%;
-    padding: 0;
-    width: 5em;
-    height: 5em;
-  }
-
   & a {
     display: block;
   }
