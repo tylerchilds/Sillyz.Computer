@@ -21,6 +21,7 @@ body::before {
   right: 0;
   height: 3rem;
   background: linear-gradient(rgba(0,0,0,.85), rgba(0,0,0, .5) 15%, transparent);
+  pointer-events: none;
   z-index: 1000;
 }
 </style>
@@ -46,6 +47,26 @@ body::before {
       ></chalect-bar>
       <button class="interface-button br" data-tooltip="Can I remix?">Y</button>
     </footer>
+    <script type="module">
+			const bottomBar = document.querySelector('footer');
+			const viewport = window.visualViewport;
+			function viewportHandler() {
+				const layoutViewport = document.getElementById('layoutViewport');
+
+				// Since the bar is position: fixed we need to offset it by the visual
+				// viewport's offset from the layout viewport origin.
+				const offsetLeft = viewport.offsetLeft;
+				const offsetTop = viewport.height
+										- layoutViewport.getBoundingClientRect().height
+										+ viewport.offsetTop;
+
+				// You could also do this by setting style.left and style.top if you
+				// use width: 100% instead.
+				bottomBar.style.transform = `translate(${offsetLeft}px, ${offsetTop}px) scale(${1 / viewport.scale})`;
+			}
+			window.visualViewport.addEventListener('resize', viewportHandler);
+
+    </script>
 		<script type="module" src="/packages/tags/design-system.js"></script>
 		<script type="module" src="/packages/widgets/menu-user.js"></script>
 		<script type="module" src="/packages/widgets/menu-resource.js"></script>
