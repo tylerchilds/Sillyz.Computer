@@ -2,13 +2,13 @@ import { tag } from "/deps.js"
 import "/packages/tags/variable-text.js"
 import "/packages/tags/highlighter.js"
 import "/packages/tags/rainbow-button.js"
+import "/packages/widgets/play-wheel.js"
 
 const $ = tag('tutorial')
 
 $.on('click', '.start', () => {
   $.write({ html: `
-    <rolodex></rolodex>
-    <script type="module" src="/packages/widgets/rolodex.js"></script>
+    <play-wheel></play-wheel>
   ` })
 })
 
