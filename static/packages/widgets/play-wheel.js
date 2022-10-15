@@ -63,7 +63,6 @@ $.render(() => {
         <div>
           ${minorNote}
         </div>
-        <div></div>
       </div>
     `
   }).join('')
@@ -102,11 +101,12 @@ $.style(`
     transform-origin: bottom;
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: repeat(5, 1fr);
+    grid-template-rows: repeat(4, 1fr);
     clip-path: polygon(23% 0%, 50% 100%, 77% 0%);
     gap: 5px;
   }
   & .step {
+    touch-action: manipulation;
     border: none;
     width: 100%;
     height: auto;
