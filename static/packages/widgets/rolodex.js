@@ -44,6 +44,7 @@ function renderItems(items = []) {
 				<iframe
 					title="${alt}"
 					sandbox="allow-scripts allow-same-origin"
+          scrolling="yes"
 					src="${src}"
 					style="width: 100%; height: 100%; border: none;"
 				></iframe>
@@ -61,28 +62,12 @@ $.style(`
   & .list {
     aspect-ratio: 1/1;
     position: relative;
-		display: grid;
-    grid-template-areas: 'stage';
+    display: grid;
+    grid-template-columns: repeat(20, 100%);
 	}
 
   & .item {
-    grid-area: stage;
-    background: white;
     box-sizing: border-box;
-    overflow: auto;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    opacity: 0;
-    pointer-events: none;
-    --size-small: scale(1);
-    --size-normal: scale(1);
-    --offset-right: translate(0, 0);
-    --offset-none: translate(0, 0);
-    --offset-left: translate(0, 0);
-    transform: var(--size-small) var(--offset-right);
   }
 
 

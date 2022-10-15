@@ -24,7 +24,7 @@ $.render(target => {
 
   const modalClose = `
     <button class="close" data-position="${position}">
-      <img src="assets/close.svg" alt="close" />
+      Close
     </button>
   `
 
@@ -97,13 +97,22 @@ $.style(`
   &[data-position="right"] .contents {
     right: 0;
   }
+
+  &[data-position="right"] .close {
+    text-align: left;
+  }
+
+  &[data-position="left"] .close {
+    text-align: right;
+  }
+
   & .contents {
       animation: &-in 250ms ease-in-out forwards;
       padding: 1rem;
       position: fixed;
       top: 0;
       bottom: 0;
-      background: rgba(255,255,255,.75);
+      background: var(--wheel-5-6);
       z-index: 900;
       overflow-y: auto;
       max-width: 100%;
@@ -113,12 +122,16 @@ $.style(`
   & .close {
     background: none;
     border: none;
+    color: var(--wheel-5-2);
     padding: none;
     opacity: .8;
     transition: opacity: 200ms;
-    position: absolute;
-    top: var(--space-6);
-    right: var(--space-6);
+    display: block;
+    width: 100%;
+    font-size: 2rem;
+    line-height: 3rem;
+    font-weight: 800;
+    mix-blend-mode: multiply;
   }
 
   & .close:hover,

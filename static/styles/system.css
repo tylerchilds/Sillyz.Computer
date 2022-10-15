@@ -441,14 +441,20 @@ menu-user {
 }
 
 .interface-button {
+  background: var(--wheel-5-5);
   display: grid;
   place-items: center;
-  border: .25em solid var(--wheel-1-5);
+  border: .25em solid var(--wheel-5-4);
   border-radius: 100%;
   overflow: hidden;
   padding: 0;
   width: 5em;
   height: 5em;
+}
+
+.interface-button:hover,
+.interface-button:focus {
+  border-color: var(--wheel-5-6);
 }
 
 .interface-button.tl {
@@ -492,12 +498,20 @@ footer chalect-bar .filterable-list {
 }
 
 footer chalect-bar .bar {
-  border: .25rem solid transparent;
+  background: var(--wheel-5-5);
+  border: .25em solid var(--wheel-5-4);
   border-radius: var(--border-radius, 4px) var(--border-radius, 4px) 0 0;
   border-bottom: none;
   line-height: 1rem;
   padding: 1rem;
 }
+
+footer chalect-bar .bar:hover,
+footer chalect-bar .bar:focus,
+footer chalect-bar .is-active .bar {
+  border-color: var(--wheel-5-6);
+}
+
 
 footer chalect-bar [name="filter"] {
   line-height: 2rem;

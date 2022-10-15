@@ -157,7 +157,6 @@ $.style(`
 	}
 
 	&.is-active .bar {
-    border-color: var(--wheel-1-5);
 	}
 	& .bar:hover,
 	& .bar:focus {
