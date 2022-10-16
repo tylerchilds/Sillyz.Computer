@@ -3,7 +3,19 @@ import * as Tone from "https://esm.sh/tone@next"
 import { playNote } from "/packages/streams/instrument.js"
 import $user from "/packages/widgets/menu-user.js"
 
-const synth = new Tone.Synth().toDestination()
+const synths = [...new Array(24)].map(() =>
+	new Tone.Synth().toDestination()
+)
+
+function release (event) {
+  const { synth } = event.target.dataset
+  synths[synth].triggerRelease();
+}
+
+function attack(event) {
+  const { note, octave, synth } = event.target.dataset
+  synths[synth].triggerAttack(`${note}${octave}`, "8n", Tone.now());
+}
 
 const $ = tag('play-wheel', {
   colors: [],
@@ -34,11 +46,11 @@ const lightnessStops = [
 $.write({ colors: recalculate() })
 $.render(() => {
   const { start, length, reverse, colors, octave, debug } = $.read()
-  const wheel = majorScale.map((majorNote, majorIndex) => {
-    const minorNote = minorScale[majorIndex]
-    const minorScaleIndex = mod(majorIndex + 3, minorScale.length)
+  const wheel = majorScale.map((majorNote, majorScaleIndex) => {
+    const minorNote = minorScale[majorScaleIndex]
+    const minorScaleIndex = mod(majorScaleIndex + 3, minorScale.length)
 
-    const majorColorIndex = mod(majorIndex * 7, colors.length)
+    const majorColorIndex = mod(majorScaleIndex * 7, colors.length)
     const minorColorIndex = mod(minorScaleIndex *7, colors.length)
 
     const majorColor = colors[majorColorIndex][octave].name
@@ -47,30 +59,37 @@ $.render(() => {
     const majorLabelClass = majorNote.length === 2 ? 'label half' : 'label'
     const minorLabelClass = minorNote.length === 2 ? 'label half' : 'label'
 
+		const majorSynth = majorScaleIndex
+		const minorSynth = minorScaleIndex + majorScale.length
+
     return `
-      <div class="group" style="transform: rotate(${majorIndex * 30}deg)">
-        <div class="${majorLabelClass}">
-          <label>
-            ${majorNote}
-          </label>
-        </div>
+      <div class="group" style="transform: rotate(${majorScaleIndex * 30}deg)">
         <button
           class="step"
+					data-synth="${majorSynth}"
           data-octave="${octave}"
           data-note="${majorNote}"
-          style="background: var(${majorColor})">
+          style="background: var(${majorColor})"
+        >
+          <div class="${majorLabelClass}">
+            <label>
+              ${majorNote}
+            </label>
+          </div>
         </button>
         <button
           class="step"
+					data-synth="${minorSynth}"
           data-octave="${octave}"
           data-note="${minorNote}"
-          style="background: var(${minorColor})">
+          style="background: var(${minorColor})"
+        >
+          <div class="${minorLabelClass}">
+            <label>
+              ${minorNote}
+            </label>
+          </div>
         </button>
-        <div class="${minorLabelClass}">
-          <label>
-            ${minorNote}
-          </label>
-        </div>
       </div>
     `
   }).join('')
@@ -109,9 +128,8 @@ $.style(`
     transform-origin: bottom;
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 2em 1fr 1fr 2em 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
     clip-path: polygon(20% 0%, 50% 100%, 80% 0%);
-    place-content: center;
     gap: 1px;
   }
   & .step {
@@ -119,14 +137,17 @@ $.style(`
     border: none;
     width: 100%;
     height: auto;
+    display: grid;
+    place-items: start;
   }
 
   & .label {
+    display: grid;
     padding: .5em;
     width: 100%;
     background: white;
     color: black;
-    display: grid;
+    pointer-events: none;
   }
 
   & .label.half {
@@ -218,11 +239,11 @@ $.on('change', '[type="checkbox"]', (event) => {
   $.write({ [name]: checked, colors: recalculate() })
 })
 
-$.on('click', '.step', (event) => {
-  const { note, octave } = event.target.dataset
+$.on('mousedown', '.step', attack)
+$.on('mouseup', '.step', release)
 
-  synth.triggerAttackRelease(`${note}${octave}`, "8n", Tone.now());
-})
+$.on('touchstart', '.step', attack)
+$.on('touchend', '.step', release)
 
 function mod(x, n) {
   return ((x % n) + n) % n;
