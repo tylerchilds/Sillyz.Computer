@@ -35,19 +35,17 @@ const lightnessStops = [
 $.write({ colors: recalculate() })
 $.render(() => {
   const { start, length, reverse, colors, octave, debug } = $.read()
-  const wheel = majorScale.map((majorNote, majorIndex) => {
-    const minorIndex = mod(majorIndex + 4, minorScale.length)
-    const minorNote = minorScale[minorIndex]
+  const wheel = majorScale.map((majorNote, index) => {
+    const minorNote = minorScale[index]
 
-    const majorColor = colors[majorIndex][octave].name
-    const minorColor = colors[minorIndex][octave].name
+    const majorColor = colors[index][octave].name
+    const minorColor = colors[mod(index + 3, minorScale.length)][octave].name
 
     return `
-      <div class="group" style="transform: rotate(${majorIndex * 30}deg)">
-        <div>
+      <div class="group" style="transform: rotate(${index * 30}deg)">
+        <div class="label">
           ${majorNote}
         </div>
-
         <button
           class="step"
           data-octave="${octave}"
@@ -60,7 +58,7 @@ $.render(() => {
           data-note="${minorNote}"
           style="background: var(${minorColor})">
         </button>
-        <div>
+        <div class="label">
           ${minorNote}
         </div>
       </div>
@@ -103,6 +101,7 @@ $.style(`
     grid-template-columns: 1fr;
     grid-template-rows: repeat(4, 1fr);
     clip-path: polygon(23% 0%, 50% 100%, 77% 0%);
+    place-content: center;
     gap: 5px;
   }
   & .step {
@@ -111,7 +110,29 @@ $.style(`
     width: 100%;
     height: auto;
   }
+
+  & .label:first-child {
+    place-self: end center;
+  }
+
+  & .label:last-child {
+    place-self: start center;
+  }
+
+  ${invertedLabels()}
 `)
+
+function invertedLabels() {
+  const rulesets = []
+  for(let i = 1; i < 360; i++) {
+    rulesets.push(`
+      & [style*="rotate(${i}deg)"] .label {
+        transform: rotate(${-1 * i}deg);
+      }
+    `)
+  }
+  return rulesets.join('')
+}
 
 function print(colors) {
   return colors.flatMap(x => x).map(({ name, value }) => `
