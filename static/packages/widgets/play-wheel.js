@@ -21,7 +21,6 @@ const minorScale = [
   'a', 'e', 'b', 'f#', 'c#', 'g#', 'd#', 'bb', 'f', 'c', 'g', 'd'
 ]
 
-
 const lightnessStops = [
   [5, 30],
   [20, 45],
@@ -35,16 +34,25 @@ const lightnessStops = [
 $.write({ colors: recalculate() })
 $.render(() => {
   const { start, length, reverse, colors, octave, debug } = $.read()
-  const wheel = majorScale.map((majorNote, index) => {
-    const minorNote = minorScale[index]
+  const wheel = majorScale.map((majorNote, majorIndex) => {
+    const minorNote = minorScale[majorIndex]
+    const minorScaleIndex = mod(majorIndex + 3, minorScale.length)
 
-    const majorColor = colors[index][octave].name
-    const minorColor = colors[mod(index + 3, minorScale.length)][octave].name
+    const majorColorIndex = mod(majorIndex * 7, colors.length)
+    const minorColorIndex = mod(minorScaleIndex *7, colors.length)
+
+    const majorColor = colors[majorColorIndex][octave].name
+    const minorColor = colors[minorColorIndex][octave].name
+
+    const majorLabelClass = majorNote.length === 2 ? 'label half' : 'label'
+    const minorLabelClass = minorNote.length === 2 ? 'label half' : 'label'
 
     return `
-      <div class="group" style="transform: rotate(${index * 30}deg)">
-        <div class="label">
-          ${majorNote}
+      <div class="group" style="transform: rotate(${majorIndex * 30}deg)">
+        <div class="${majorLabelClass}">
+          <label>
+            ${majorNote}
+          </label>
         </div>
         <button
           class="step"
@@ -58,8 +66,10 @@ $.render(() => {
           data-note="${minorNote}"
           style="background: var(${minorColor})">
         </button>
-        <div class="label">
-          ${minorNote}
+        <div class="${minorLabelClass}">
+          <label>
+            ${minorNote}
+          </label>
         </div>
       </div>
     `
@@ -88,21 +98,21 @@ $.style(`
   & .wheel {
     display: grid;
     grid-template-areas: "slot";
-    grid-template-rows: 40vmin;
+    grid-template-rows: 45vmin;
     grid-template-columns: 40vmin;
     place-content: start center;
-    padding: 10vmin;
-    height: 80vmin;
+    padding: 1rem;
+    height: 90vmin;
   }
   & .group {
     grid-area: slot;
     transform-origin: bottom;
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: repeat(4, 1fr);
-    clip-path: polygon(23% 0%, 50% 100%, 77% 0%);
+    grid-template-rows: 2em 1fr 1fr 2em 1fr;
+    clip-path: polygon(20% 0%, 50% 100%, 80% 0%);
     place-content: center;
-    gap: 5px;
+    gap: 1px;
   }
   & .step {
     touch-action: manipulation;
@@ -111,11 +121,25 @@ $.style(`
     height: auto;
   }
 
-  & .label:first-child {
+  & .label {
+    padding: .5em;
+    width: 100%;
+    background: white;
+    color: black;
+    display: grid;
+  }
+
+  & .label.half {
+    background: black;
+    color: white;
+  }
+
+
+  & .label:first-child label {
     place-self: end center;
   }
 
-  & .label:last-child {
+  & .label:last-child label {
     place-self: start center;
   }
 
@@ -126,7 +150,7 @@ function invertedLabels() {
   const rulesets = []
   for(let i = 1; i < 360; i++) {
     rulesets.push(`
-      & [style*="rotate(${i}deg)"] .label {
+      & [style*="rotate(${i}deg)"] label {
         transform: rotate(${-1 * i}deg);
       }
     `)
