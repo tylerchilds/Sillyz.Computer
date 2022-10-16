@@ -1,25 +1,28 @@
 import { Color, tag, signal } from "/deps.js"
 import * as Tone from "https://esm.sh/tone@next"
-import { playNote } from "/packages/streams/instrument.js"
 import $user from "/packages/widgets/menu-user.js"
 
 const synths = [...new Array(24)].map(() =>
-	new Tone.Synth().toDestination()
+	new Tone.FMSynth().toMaster()
 )
 
-function release (event) {
-  const { synth } = event.target.dataset
-  synths[synth].triggerRelease();
+function attack(event) {
+	event.preventDefault()
+  const { note, octave, synth } = event.target.dataset
+  synths[synth].triggerAttack(`${note}${octave}`, "2n");
+	event.target.classList.add('active')
 }
 
-function attack(event) {
-  const { note, octave, synth } = event.target.dataset
-  synths[synth].triggerAttack(`${note}${octave}`, "8n", Tone.now());
+function release (event) {
+	event.preventDefault()
+  const { synth } = event.target.dataset
+  synths[synth].triggerRelease();
+	event.target.classList.remove('active')
 }
 
 const $ = tag('play-wheel', {
   colors: [],
-  start: 0,
+  start: 120,
   length: 360,
   octave: 4,
   reverse: false
@@ -53,42 +56,41 @@ $.render(() => {
     const majorColorIndex = mod(majorScaleIndex * 7, colors.length)
     const minorColorIndex = mod(minorScaleIndex *7, colors.length)
 
-    const majorColor = colors[majorColorIndex][octave].name
-    const minorColor = colors[minorColorIndex][octave].name
+    const majorColorScales = colors[majorColorIndex].map(x => x.name)
+    const minorColorScales = colors[minorColorIndex].map(x => x.name)
 
-    const majorLabelClass = majorNote.length === 2 ? 'label half' : 'label'
-    const minorLabelClass = minorNote.length === 2 ? 'label half' : 'label'
+    const majorStepClass = majorNote.length === 2 ? 'step half' : 'step'
+    const minorStepClass = minorNote.length === 2 ? 'step half' : 'step'
 
 		const majorSynth = majorScaleIndex
 		const minorSynth = minorScaleIndex + majorScale.length
 
     return `
-      <div class="group" style="transform: rotate(${majorScaleIndex * 30}deg)">
+      <div class="group" style="
+				transform: rotate(${majorScaleIndex * 30}deg)
+				
+			">
         <button
-          class="step"
+          class="${majorStepClass}"
 					data-synth="${majorSynth}"
           data-octave="${octave}"
           data-note="${majorNote}"
-          style="background: var(${majorColor})"
+          style="${printColorScale(majorColorScales)}"
         >
-          <div class="${majorLabelClass}">
-            <label>
-              ${majorNote}
-            </label>
-          </div>
+					<div class="label">
+						<label>${majorNote}</label>
+					</div>
         </button>
         <button
-          class="step"
+          class="${minorStepClass}"
 					data-synth="${minorSynth}"
           data-octave="${octave}"
           data-note="${minorNote}"
-          style="background: var(${minorColor})"
+          style="${printColorScale(minorColorScales)}"
         >
-          <div class="${minorLabelClass}">
-            <label>
-              ${minorNote}
-            </label>
-          </div>
+					<div class="label">
+						<label>${minorNote}</label>
+					</div>
         </button>
       </div>
     `
@@ -139,20 +141,71 @@ $.style(`
     height: auto;
     display: grid;
     place-items: start;
+    color: black;
+		position: relative;
+		background: linear-gradient(
+			white 2em,
+			var(--color-step-4) 2em,
+			var(--color-step-3),
+			var(--color-step-2)
+		)
   }
+
+  & .step.half {
+    color: white;
+		background: linear-gradient(
+			black 2em,
+			var(--color-step-4) 2em,
+			var(--color-step-3),
+			var(--color-step-2)
+		)
+  }
+
+	& .step::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(
+			rgba(0, 0, 0, .85),
+			transparent,
+			rgba(255, 255, 255, .85),
+			transparent,
+			transparent,
+			transparent
+		);
+		background-size: 300% 300%;
+		background-position-y: 100%;
+		animation: &-decay 100ms ease-out forwards;
+	}
+
+	& .step.active::before {
+		animation: &-attack 100ms ease-out forwards;
+	}
+
+	@keyframes &-attack {
+		0% {
+			background-position-y: 50%;
+		}
+		100% {
+			background-position-y: 0%;
+		}
+	}
+
+	@keyframes &-decay {
+		0% {
+			background-position-y: 50%;
+		}
+		100% {
+			background-position-y: 100%;
+		}
+	}
+
 
   & .label {
     display: grid;
     padding: .5em;
     width: 100%;
-    background: white;
-    color: black;
     pointer-events: none;
-  }
-
-  & .label.half {
-    background: black;
-    color: white;
   }
 
 
@@ -183,6 +236,10 @@ function print(colors) {
   return colors.flatMap(x => x).map(({ name, value }) => `
     ${name}: ${value};
   `).join('')
+}
+
+function printColorScale(scale) {
+	return scale.map((name, i) => `--color-step-${i}: var(${name})`).join(';')
 }
 
 function recalculate() {

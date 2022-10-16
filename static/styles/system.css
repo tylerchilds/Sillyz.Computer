@@ -165,40 +165,6 @@ a:active {
 	color: var(--color-link-active);
 }
 
-:focus {
-	position: relative;
-}
-
-:focus::before {
-	content: '';
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	background:
-		linear-gradient(180deg, hsla(180,0%,100%,0) 0%, hsla(180,0%,100%,1) 50%, hsla(180,0%,100%,0) 100%);
-	background-size: 1px 2000px;
-	background-repeat: repeat-x;
-	mix-blend-mode: overlay;
-	animation: focus-party-loop 3000ms infinite;
-	animation-delay: -2000ms;
-}
-
-@keyframes focus-party-loop {
-	0% {
-		background-position-y: 4000px;
-	}
-
-	50% {
-		background-position-y: 1000px;
-	}
-	100% {
-		background-position-y: -2000px;
-	}
-}
-
-
 img,
 video,
 svg{
