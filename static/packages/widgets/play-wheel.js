@@ -208,14 +208,7 @@ $.style(`
 		-khtml-user-select: none; /* Konqueror HTML */
 		-moz-user-select: none; /* Firefox */
 		-ms-user-select: none; /* Internet Explorer/Edge */
-		opacity: .85;
-		mix-blend-mode: multiply;
-		transition: opacity 100ms ease-out;
   }
-
-	& .step.active {
-		opacity: 1;			
-	}
 
   & .step.half {
     color: white;
