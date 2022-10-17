@@ -14,7 +14,7 @@ $.render(() => {
     isOpen
   } = $.read()
 
-  if(!isOpen) return ''
+  if(!isOpen) return ' '
 
   const modalClose = `
     <button class="close">
@@ -114,7 +114,7 @@ $.style(`
     padding: var(--space-9) var(--space-9) var(--space-9) var(--space-8);
     min-height: 100px;
     max-width: 80ch;
-    width: auto;
+    width: 100%;
     z-index: -1;
     opacity: 0;
     max-height: 80vh;

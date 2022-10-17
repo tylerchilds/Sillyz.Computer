@@ -52,6 +52,7 @@ function persist(target, $, { link }) {
 
 $.style(`
   & {
+		display: block;
     max-height: 60vh;
     overflow: scroll;
   }

@@ -33,9 +33,17 @@ $.on('click', '.remix', async () => {
   bus.state[serverUrl] = { file: `<html style="background: var(--theme, rebeccapurple)">
 <link href="/styles/system.css" rel="stylesheet">
 <body>
+
+<share-button style="
+	position: absolute;
+	right: 1rem;
+	bottom: 1rem;
+"></share-button>
 <play-wheel></play-wheel>
 
 <script type="module">
+import "/packages/tags/share-button.js"
+import { showModal } from '/packages/ui/modal.js'
 ${code}
 </script>` }
 
@@ -43,6 +51,7 @@ ${code}
     <rainbow-button class="atl">
       <a href="${clientUrl}" target="_blank">Play!</a>
     </rainbow-button>
+		<br />
     <live-code src="${serverUrl}"></live-code>
   `)
 })
