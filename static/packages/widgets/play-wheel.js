@@ -148,7 +148,12 @@ $.style(`
 			var(--color-step-4) 2em,
 			var(--color-step-3),
 			var(--color-step-2)
-		)
+		);
+		user-select: none; /* supported by Chrome and Opera */
+		-webkit-user-select: none; /* Safari */
+		-khtml-user-select: none; /* Konqueror HTML */
+		-moz-user-select: none; /* Firefox */
+		-ms-user-select: none; /* Internet Explorer/Edge */
   }
 
   & .step.half {
