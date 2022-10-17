@@ -178,6 +178,12 @@ $.style(`
     place-content: start center;
     padding: 1rem;
     height: 90vmin;
+		user-select: none; /* supported by Chrome and Opera */
+		-webkit-user-select: none; /* Safari */
+		-khtml-user-select: none; /* Konqueror HTML */
+		-moz-user-select: none; /* Firefox */
+		-ms-user-select: none; /* Internet Explorer/Edge */
+    touch-action: manipulation;
   }
   & .group {
     grid-area: slot;
@@ -189,7 +195,6 @@ $.style(`
     gap: 1px;
   }
   & .step {
-    touch-action: manipulation;
     border: none;
     width: 100%;
     height: auto;
@@ -203,11 +208,6 @@ $.style(`
 			var(--color-step-3),
 			var(--color-step-2)
 		);
-		user-select: none; /* supported by Chrome and Opera */
-		-webkit-user-select: none; /* Safari */
-		-khtml-user-select: none; /* Konqueror HTML */
-		-moz-user-select: none; /* Firefox */
-		-ms-user-select: none; /* Internet Explorer/Edge */
   }
 
   & .step.half {
