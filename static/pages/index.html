@@ -13,16 +13,26 @@ html {
   background: var(--theme, var(--wheel-5-3));
 }
 
-body::before {
+body::before,
+body::after {
   content: '';
   position: fixed;
-  top: 0;
   left: 0;
   right: 0;
   height: 3rem;
-  background: linear-gradient(rgba(0,0,0,.85), rgba(0,0,0, .5) 15%, transparent);
   pointer-events: none;
-  z-index: 800;
+  z-index: 200;
+}
+
+body::before{
+  background: linear-gradient(rgba(255,255,255,.85), rgba(255,255,255, .5) 15%, transparent);
+	mix-blend-mode: lighten;
+  top: 0;
+}
+body::after {
+  bottom: 0;
+  background: linear-gradient(0deg, rgba(0,0,0,.85), rgba(0,0,0, .5) 15%, transparent);
+	mix-blend-mode: multiply;
 }
 </style>
     <design-system></design-system>

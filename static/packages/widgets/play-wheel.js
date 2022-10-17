@@ -6,26 +6,13 @@ const synths = [...new Array(24)].map(() =>
 	new Tone.FMSynth().toMaster()
 )
 
-function attack(event) {
-	event.preventDefault()
-  const { note, octave, synth } = event.target.dataset
-  synths[synth].triggerAttack(`${note}${octave}`, "2n");
-	event.target.classList.add('active')
-}
-
-function release (event) {
-	event.preventDefault()
-  const { synth } = event.target.dataset
-  synths[synth].triggerRelease();
-	event.target.classList.remove('active')
-}
-
 const $ = tag('play-wheel', {
   colors: [],
-  start: 120,
+  start: 0,
   length: 360,
   octave: 4,
-  reverse: false
+  reverse: false,
+	pitch: 0
 })
 
 const majorScale = [
@@ -46,15 +33,36 @@ const lightnessStops = [
   [95, 120]
 ]
 
+function attack(event) {
+	event.preventDefault()
+	const { colors } = $.read()
+  const { note, octave, synth, hue } = event.target.dataset
+  synths[synth].triggerAttack(`${note}${octave}`, "2n");
+	event.target.classList.add('active')
+
+  document.querySelector('html').style = `
+		--theme: var(${colors[parseInt(hue)][parseInt(octave)].name});
+	`
+}
+
+function release (event) {
+	event.preventDefault()
+  const { synth } = event.target.dataset
+  synths[synth].triggerRelease();
+	event.target.classList.remove('active')
+}
+
+
 $.write({ colors: recalculate() })
 $.render(() => {
-  const { start, length, reverse, colors, octave, debug } = $.read()
-  const wheel = majorScale.map((majorNote, majorScaleIndex) => {
-    const minorNote = minorScale[majorScaleIndex]
+  const { start, length, reverse, colors, octave, pitch, debug } = $.read()
+  const wheel = majorScale.map((majorNote, index) => {
+		const majorScaleIndex = mod((index - pitch * 7), majorScale.length)
+    const minorNote = minorScale[mod(majorScaleIndex + pitch * 7, minorScale.length)]
     const minorScaleIndex = mod(majorScaleIndex + 3, minorScale.length)
 
-    const majorColorIndex = mod(majorScaleIndex * 7, colors.length)
-    const minorColorIndex = mod(minorScaleIndex *7, colors.length)
+    const majorColorIndex = mod(mod(majorScaleIndex * 7, colors.length) + pitch, colors.length)
+    const minorColorIndex = mod(mod(minorScaleIndex * 7, colors.length) + pitch, colors.length)
 
     const majorColorScales = colors[majorColorIndex].map(x => x.name)
     const minorColorScales = colors[minorColorIndex].map(x => x.name)
@@ -75,6 +83,7 @@ $.render(() => {
 					data-synth="${majorSynth}"
           data-octave="${octave}"
           data-note="${majorNote}"
+					data-hue="${majorColorIndex}"
           style="${printColorScale(majorColorScales)}"
         >
 					<div class="label">
@@ -86,6 +95,7 @@ $.render(() => {
 					data-synth="${minorSynth}"
           data-octave="${octave}"
           data-note="${minorNote}"
+					data-hue="${minorColorIndex}"
           style="${printColorScale(minorColorScales)}"
         >
 					<div class="label">
@@ -99,6 +109,7 @@ $.render(() => {
   return `
     <div class="wheel">
       ${wheel}
+			${controls()}
     </div>
     <form>
       ${start} ${length} ${reverse}
@@ -113,6 +124,49 @@ $.render(() => {
       }
     </style>
   `
+})
+
+function controls() {
+	const { pitch, colors, octave } = $.read()
+	const hue = colors[mod(pitch, colors.length)]
+	const upHue = colors[mod(pitch + 1, colors.length)]
+	const downHue = colors[mod(pitch - 1, colors.length)]
+	const variables = `
+		--wheel-up: var(${hue[Math.min(octave + 1, 6)].name});
+		--wheel-right: var(${upHue[octave].name});
+		--wheel-down: var(${hue[Math.max(octave - 1, 0)].name});
+		--wheel-left: var(${downHue[octave].name});
+	`
+	return `
+		<div class="controls" style="transform: rotate(45deg); ${variables}">
+			<button class="octave-up"></button>
+			<button class="pitch-up"></button>
+			<button class="pitch-down"></button>
+			<button class="octave-down"></button>
+		</div>
+	`
+}
+
+$.on('click', '.octave-up', () => {
+	const octave = $.read().octave + 1
+	if(octave > 6) { return }
+	$.write({ octave })
+})
+
+$.on('click', '.octave-down', () => {
+	const octave = $.read().octave - 1
+	if(octave < 0) { return }
+	$.write({ octave })
+})
+
+$.on('click', '.pitch-up', () => {
+	const pitch = $.read().pitch + 1
+	$.write({ pitch })
+})
+
+$.on('click', '.pitch-down', () => {
+	const pitch = $.read().pitch - 1
+	$.write({ pitch })
 })
 
 $.style(`
@@ -154,7 +208,14 @@ $.style(`
 		-khtml-user-select: none; /* Konqueror HTML */
 		-moz-user-select: none; /* Firefox */
 		-ms-user-select: none; /* Internet Explorer/Edge */
+		opacity: .85;
+		mix-blend-mode: multiply;
+		transition: opacity 100ms ease-out;
   }
+
+	& .step.active {
+		opacity: 1;			
+	}
 
   & .step.half {
     color: white;
@@ -171,9 +232,9 @@ $.style(`
 		position: absolute;
 		inset: 0;
 		background: linear-gradient(
-			rgba(0, 0, 0, .85),
+			rgba(0, 0, 0, .25),
 			transparent,
-			rgba(255, 255, 255, .85),
+			rgba(255, 255, 255, .75),
 			transparent,
 			transparent,
 			transparent
@@ -221,6 +282,38 @@ $.style(`
   & .label:last-child label {
     place-self: start center;
   }
+
+	& .controls {
+		display: grid;
+		grid-area: slot;
+		grid-template-columns: 1fr 1fr;
+		width: 32vmin;
+		height: 32vmin;
+		clip-path: circle(50%);
+		place-self: end center;
+		margin-bottom: -16vmin;
+	}
+
+	& .controls button {
+		width: 100%;
+		height: 100%;
+	}
+
+	& .octave-up {
+		background: var(--wheel-up);
+	}
+
+	& .octave-down {
+		background: var(--wheel-down);
+	}
+
+	& .pitch-up {
+		background: var(--wheel-right);
+	}
+
+	& .pitch-down {
+		background: var(--wheel-left);
+	}
 
   ${invertedLabels()}
 `)
