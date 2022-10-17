@@ -43,6 +43,7 @@ $.style(`
     transition: all 100ms ease-in-out;
   }
 
+  & > *:link,
   & > *:visited {
     color: white;
   }

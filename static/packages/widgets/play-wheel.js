@@ -1,4 +1,4 @@
-import { Color, tag, signal } from "/deps.js"
+import { Color, tag } from "/deps.js"
 import * as Tone from "https://esm.sh/tone@next"
 import $user from "/packages/widgets/menu-user.js"
 
@@ -40,9 +40,10 @@ function attack(event) {
   synths[synth].triggerAttack(`${note}${octave}`, "2n");
 	event.target.classList.add('active')
 
-  document.querySelector('html').style = `
-		--theme: var(${colors[parseInt(hue)][parseInt(octave)].name});
-	`
+  document.querySelector('html').style.setProperty(
+		"--theme",
+		`var(${colors[parseInt(hue)][parseInt(octave)].name})`
+	)
 }
 
 function release (event) {
@@ -58,11 +59,19 @@ $.render(() => {
   const { start, length, reverse, colors, octave, pitch, debug } = $.read()
   const wheel = majorScale.map((majorNote, index) => {
 		const majorScaleIndex = mod((index - pitch * 7), majorScale.length)
-    const minorNote = minorScale[mod(majorScaleIndex + pitch * 7, minorScale.length)]
+    const minorNote = minorScale[
+			mod(majorScaleIndex + pitch * 7, minorScale.length)
+		]
     const minorScaleIndex = mod(majorScaleIndex + 3, minorScale.length)
 
-    const majorColorIndex = mod(mod(majorScaleIndex * 7, colors.length) + pitch, colors.length)
-    const minorColorIndex = mod(mod(minorScaleIndex * 7, colors.length) + pitch, colors.length)
+    const majorColorIndex = mod(
+			mod(majorScaleIndex * 7, colors.length) + pitch,
+			colors.length
+		)
+    const minorColorIndex = mod(
+			mod(minorScaleIndex * 7, colors.length) + pitch,
+			colors.length
+		)
 
     const majorColorScales = colors[majorColorIndex].map(x => x.name)
     const minorColorScales = colors[minorColorIndex].map(x => x.name)
@@ -170,13 +179,18 @@ $.on('click', '.pitch-down', () => {
 })
 
 $.style(`
+  & {
+    height: 100%;
+    display: grid;
+    place-content: center;
+  }
   & .wheel {
     display: grid;
     grid-template-areas: "slot";
     grid-template-rows: 45vmin;
     grid-template-columns: 40vmin;
     place-content: start center;
-    padding: 1rem;
+    padding: 0 1rem;
     height: 90vmin;
 		user-select: none; /* supported by Chrome and Opera */
 		-webkit-user-select: none; /* Safari */
@@ -357,21 +371,15 @@ function recalculate() {
     })
   })
 
-  if($user.read()._link) signal($user.read()._link).colorVariables = print(colors)
+  if($user.read()._link)
+		bus.state[$user.read()._link].colorVariables = print(colors)
 
   return colors
 }
 
-
-const eventMap = {
-  37: () => $.write({ start: $.read().start - 30}),
-  39: () => $.write({ start: $.read().start + 30}),
-};
-
-document.addEventListener('keydown', (event) => {
-  const handler = eventMap[event.keyCode] || console.log
-  handler()
-  $.write({ colors: recalculate() })
+document.body.addEventListener('mousedown', (event) => {
+	if(event.target !== document.body) return
+  $.write({ start: $.read().start + 30, colors: recalculate() })
 });
 
 
@@ -396,4 +404,3 @@ $.on('touchend', '.step', release)
 function mod(x, n) {
   return ((x % n) + n) % n;
 }
-

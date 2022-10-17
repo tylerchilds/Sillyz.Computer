@@ -49,3 +49,10 @@ function persist(target, $, { link }) {
     }
 	}
 }
+
+$.style(`
+  & {
+    max-height: 60vh;
+    overflow: scroll;
+  }
+`)

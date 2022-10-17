@@ -2,14 +2,49 @@ import { tag } from "/deps.js"
 import "/packages/tags/variable-text.js"
 import "/packages/tags/highlighter.js"
 import "/packages/tags/rainbow-button.js"
+import "/packages/tags/live-code.js"
 import "/packages/widgets/play-wheel.js"
+
+import { showModal } from '/packages/ui/modal.js'
+const randomString = (length) =>
+  [ ...Array(length) ].map(() => (~~(Math.random() * 36)).toString(36)).join('');
 
 const $ = tag('tutorial')
 
 $.on('click', '.start', () => {
   $.write({ html: `
+    <rainbow-button class="fbl">
+      <button class="remix">
+        Remix
+      </button>
+    </rainbow-button>
     <play-wheel></play-wheel>
   ` })
+})
+
+$.on('click', '.remix', async () => {
+  const randomPath = randomString(128) + '.html'
+  const clientUrl = "https://sillyz.computer/tmp/" + randomPath
+  const serverUrl = "https://1998.social/tmp/" + randomPath
+
+  const code = await fetch("/packages/widgets/play-wheel.js")
+    .then(res => res.text())
+
+  bus.state[serverUrl] = { file: `<html style="background: var(--theme, rebeccapurple)">
+<link href="/styles/system.css" rel="stylesheet">
+<body>
+<play-wheel></play-wheel>
+
+<script type="module">
+${code}
+</script>` }
+
+  showModal(`
+    <rainbow-button class="atl">
+      <a href="${clientUrl}" target="_blank">Play!</a>
+    </rainbow-button>
+    <live-code src="${serverUrl}"></live-code>
+  `)
 })
 
 $.render(() => {
@@ -287,5 +322,16 @@ $.style(`
    }
  }
 
+  & .fbl {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+  }
+
+  .modal .atl {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
 `)
 

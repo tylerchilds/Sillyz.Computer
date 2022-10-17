@@ -61,17 +61,17 @@ $.style(`
     overflow: hidden;
   }
 
-  body.overlay:before {
+  .overlay ctx-overlay:before {
     animation: fadein 250ms ease-in-out forwards;
     content: '';
-    background: rgba(0,0,0, .1);
+    background: rgba(0,0,0, .5);
     position: fixed;
     top: 0;
     bottom: 0;
     right: 0;
     left: 0;
-    filter: blur(10px);
-    z-index: 2;
+    backdrop-filter: blur(10px);
+    z-index: 900;
   }
 
   @keyframes fadein {
@@ -94,7 +94,7 @@ $.style(`
     left: 0;
     right: 0;
     overflow-y: auto;
-    z-index: 2;
+    z-index: 1100;
   }
 
   body.overlay & {
@@ -113,10 +113,12 @@ $.style(`
     position: relative;
     padding: var(--space-9) var(--space-9) var(--space-9) var(--space-8);
     min-height: 100px;
-    max-width: 640px;
-    width: 100%;
+    max-width: 80ch;
+    width: auto;
     z-index: -1;
     opacity: 0;
+    max-height: 80vh;
+    overflow: hidden;
   }
 
   @keyframes modal-in {
@@ -127,7 +129,7 @@ $.style(`
 
     100% {
       opacity: 1;
-      z-index: 3;
+      z-index: 1100;
     }
   }
 
