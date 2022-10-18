@@ -341,6 +341,7 @@ var Drawing = useSVG ? svgDrawer : !_isSupportCanvas() ? (function () {
 		this._elImage = document.createElement("img");
 		this._elImage.alt = "Scan me!";
 		this._elImage.style.display = "none";
+    this._el.innerHTML = ''
 		this._el.appendChild(this._elImage);
 		this._bSupportDataURI = null;
 	};
