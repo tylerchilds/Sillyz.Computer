@@ -25,10 +25,12 @@ $.on('click', '.remix', async () => {
   const clientUrl = "https://sillyz.computer/tmp/" + randomPath
   const serverUrl = "https://1998.social/tmp/" + randomPath
 
-  const code = await fetch("/packages/widgets/play-wheel.js")
-    .then(res => res.text())
+  const href= "/packages/widgets/play-wheel.js"
+  const code = await fetch(href).then(res => res.text())
 
-  bus.state[serverUrl] = { file: `<html style="background: var(--theme, rebeccapurple)">
+  bus.state[serverUrl] = {
+    childOf: href,
+    file: `<html style="background: var(--theme, rebeccapurple)">
 <link href="/styles/system.css" rel="stylesheet">
 <body>
 
@@ -43,7 +45,8 @@ $.on('click', '.remix', async () => {
 import "/packages/tags/share-button.js"
 import { showModal } from '/packages/ui/modal.js'
 ${code}
-</script>` }
+</script>`
+  }
 
   showModal(`
     <rainbow-button class="atl">

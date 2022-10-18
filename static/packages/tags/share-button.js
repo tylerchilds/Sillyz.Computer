@@ -47,7 +47,7 @@ $modal.on('click', '.remix', async () => {
 
   const file = await fetch(href).then(res => res.text())
 
-  bus.state[serverUrl] = { file }
+  bus.state[serverUrl] = { file, childOf: href }
 
   showModal(`
     <rainbow-button class="atl">
@@ -57,3 +57,12 @@ $modal.on('click', '.remix', async () => {
     <live-code src="${serverUrl}"></live-code>
   `)
 })
+
+$modal.style(`
+  & {
+    display: grid;
+    place-content: center;
+    text-align: center;
+    gap: 2rem;
+  }
+`)
