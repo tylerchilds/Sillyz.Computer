@@ -6,8 +6,12 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js'
 
 const MONDRIAN_HOST = 'https://1998.social'
 
+const randomString = (length) =>
+  [ ...Array(length) ].map(() => (~~(Math.random() * 36)).toString(36)).join('');
+
 export {
   MONDRIAN_HOST,
+  randomString,
   createClient,
   Color,
   focusTrap,

@@ -1,34 +1,59 @@
 import "/packages/tags/rainbow-button.js"
 import "/packages/tags/qr-code.js"
-import { tag } from "/deps.js"
+import "/packages/tags/live-code.js"
+import { tag, randomString } from "/deps.js"
 import { showModal } from '/packages/ui/modal.js'
 
-const $ = tag('share-button', { toasting: false })
+const $ = tag('share-button')
+const $modal = tag('share-button-modal')
 
-$.render((target) => {
-	const { toasting } = $.read()
-
+$.render(() => {
   return `
-	<rainbow-button>
-		<button style="
-			font-size: 6vmin;
-			line-height: 1;
-			padding: 3vmin 4vmin;
-		">
-			Share
-		</button>
-	</rainbow-button>
-
+    <rainbow-button>
+      <button style="
+        font-size: 6vmin;
+        line-height: 1;
+        padding: 3vmin 4vmin;
+      ">
+        Share
+      </button>
+    </rainbow-button>
   `
 })
 
-$.on('click', 'button', function copy() {
-  const { origin, search, pathname } = window.location
+$modal.render(() => {
+  const { href } = window.location
 
-  const url = `${origin}${search}${pathname}`;
+  return `
+		<qr-code url="${href}"></qr-code>
+		<a href="${href}">Regular Link</a>
+    <rainbow-button>
+      <button class="remix">
+        Remix
+      </button>
+    </rainbow-button>
+	`
+})
 
-	showModal(`
-		<qr-code url="${url}"></div>
-		<a href="${url}">Regular Link</a>
-	`)
+$.on('click', 'button', function() {
+  	showModal(`<share-button-modal></share-button-modal>`)
+})
+
+$modal.on('click', '.remix', async () => {
+  const { href } = window.location
+  const randomPath = randomString(128) + '.html'
+  const clientUrl = "https://sillyz.computer/tmp/" + randomPath
+  const serverUrl = "https://1998.social/tmp/" + randomPath
+
+  const file = await fetch(href).then(res => res.text())
+
+  bus.state[serverUrl] = { file }
+
+  showModal(`
+    <rainbow-button class="atl">
+      <a href="${clientUrl}" target="_blank">Play!</a>
+    </rainbow-button>
+		<br />
+    <live-code src="${serverUrl}"></live-code>
+  `)
 })

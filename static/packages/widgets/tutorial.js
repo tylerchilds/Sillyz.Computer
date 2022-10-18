@@ -1,4 +1,4 @@
-import { tag } from "/deps.js"
+import { tag, randomString } from "/deps.js"
 import "/packages/tags/variable-text.js"
 import "/packages/tags/highlighter.js"
 import "/packages/tags/rainbow-button.js"
@@ -6,8 +6,6 @@ import "/packages/tags/live-code.js"
 import "/packages/widgets/play-wheel.js"
 
 import { showModal } from '/packages/ui/modal.js'
-const randomString = (length) =>
-  [ ...Array(length) ].map(() => (~~(Math.random() * 36)).toString(36)).join('');
 
 const $ = tag('tutorial')
 
