@@ -1,4 +1,5 @@
 import "/packages/tags/rainbow-button.js"
+import "/packages/tags/qr-code.js"
 import { tag } from "/deps.js"
 import { showModal } from '/packages/ui/modal.js'
 
@@ -21,12 +22,13 @@ $.render((target) => {
   `
 })
 
-$.on('click', 'button', async function copy() {
+$.on('click', 'button', function copy() {
   const { origin, search, pathname } = window.location
 
   const url = `${origin}${search}${pathname}`;
 
 	showModal(`
+		<qr-code url="${url}"></div>
 		<a href="${url}">Regular Link</a>
 	`)
 })

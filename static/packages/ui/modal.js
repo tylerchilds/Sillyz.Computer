@@ -18,7 +18,7 @@ $.render(() => {
 
   const modalClose = `
     <button class="close">
-      <img src="assets/close.svg" alt="close" />
+      Close
     </button>
   `
 
