@@ -323,6 +323,25 @@ $.style(`
 	}
 
   ${invertedLabels()}
+
+  &.clean .step {
+		background: linear-gradient(
+			var(--color-step-4) 2em,
+			var(--color-step-3),
+			var(--color-step-2)
+		);
+  }
+
+  &.clean .step.half {
+		background: linear-gradient(
+			var(--color-step-4) 2em,
+			var(--color-step-3),
+			var(--color-step-2)
+		)
+  }
+  &.clean .label {
+    display: none;
+  }
 `)
 
 function invertedLabels() {

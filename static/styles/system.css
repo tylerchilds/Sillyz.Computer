@@ -164,7 +164,7 @@ body {
 
 body {
 	font-size: 1rem;
-	line-height: 1.3rem;
+	line-height: 1.3;
 	font-family: var(--font-body);
   position: relative;
 }
@@ -327,10 +327,13 @@ menu-user {
 }
 
 .field {
-	display: flex;
-	margin-bottom: 48rem;
+	display: grid;
+  background: rgba(0, 0, 0, .85);
+  color: rgba(255, 255, 255, .85);
+	margin-bottom: 1rem;
 	position: relative;
 	text-align: left;
+  border-radius: var(--border-radius, 4px);
 }
 
 .field .label {
@@ -346,13 +349,8 @@ menu-user {
 }
 
 .field *:not([type=radio]):not([type=checkbox]) + .label {
-	font-size: .5rem;
-	position: absolute;
-	left: 1px;
 	line-height: 1;
-	padding: .25rem .25rem 0;
-	right: 1px;
-	top: 0;
+	padding: 0 .5rem .5rem;
 }
 
 .field input,
@@ -362,8 +360,10 @@ menu-user {
 	border: 1px solid var(--color-neutral-shade1);
 	border-radius: var(--border-radius);
 	box-sizing: border-box;
+  color: rgba(255, 255, 255, .85);
+  font-size: 2rem;
 	margin-top: -2px;
-	padding: .75rem .25rem .125rem;
+	padding: .5rem;
 	position: relative;
 	width: 100%;
 }

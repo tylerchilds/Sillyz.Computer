@@ -118,7 +118,7 @@ $.style(`
     z-index: -1;
     opacity: 0;
     max-height: 80vh;
-    overflow: hidden;
+    overflow: scroll;
   }
 
   @keyframes modal-in {

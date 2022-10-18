@@ -6,5 +6,6 @@
 
 import { start } from "$fresh/server.ts";
 import manifest from "./fresh.gen.ts";
+import "https://deno.land/x/dotenv/load.ts";
 
 await start(manifest, { port: 1998 });

@@ -2,8 +2,13 @@ import tag, { listen, on, signal, read, write } from 'https://deno.land/x/tag@v0
 import * as focusTrap from 'https://esm.sh/focus-trap';
 import Color from "https://esm.sh/colorjs.io@0.4.0";
 import Quill from 'https://esm.sh/quill@1.3.7'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js'
+
+const MONDRIAN_HOST = 'https://1998.social'
 
 export {
+  MONDRIAN_HOST,
+  createClient,
   Color,
   focusTrap,
   listen,
