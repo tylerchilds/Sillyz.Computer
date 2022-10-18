@@ -1,6 +1,7 @@
 import { tag } from '/deps.js'
 import { showModal } from '/packages/ui/modal.js'
 import '/packages/tags/variable-text.js'
+import '/packages/tags/highlighter.js'
 import '/packages/widgets/subscribe-email.js'
 
 const $ = tag('stay-in-touch')

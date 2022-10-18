@@ -1,12 +1,15 @@
 import { tag, createClient, MONDRIAN_HOST } from '/deps.js'
 import '/packages/tags/rainbow-button.js'
+import '/packages/tags/highlighter.js'
 
 const $ = tag('subscribe-email')
 
 $.render(() => {
   const { error, success } = $.read()
 
-  if(success) return `<highlighter color="green" data-tooltip="Seriously, you're the best!">Your message is traveling to me at the speed of light!</highlighter>`
+  if(success) return `
+    <highlighter color="green" data-tooltip="Seriously, you're the best!">Your message is traveling to me at the speed of light!</highlighter>
+  `
 
   const { supabaseUrl, supabaseKey } = bus.state[MONDRIAN_HOST + '/config.json']
 
