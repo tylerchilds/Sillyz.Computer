@@ -31,6 +31,9 @@ $.on('click', '.remix', async () => {
   bus.state[serverUrl] = {
     childOf: href,
     file: `<html style="background: var(--theme, rebeccapurple)">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="/styles/system.css" rel="stylesheet">
 <body>
 
@@ -40,9 +43,11 @@ $.on('click', '.remix', async () => {
 	bottom: 1rem;
 "></share-button>
 <play-wheel></play-wheel>
+<stay-in-touch></stay-in-touch>
 
 <script type="module">
 import "/packages/tags/share-button.js"
+import "/packages/tags/stay-in-touch.js"
 import { showModal } from '/packages/ui/modal.js'
 ${code}
 </script>`
