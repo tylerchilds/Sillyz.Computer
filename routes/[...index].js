@@ -8,13 +8,13 @@ export const handler = async (_request, context) => {
   const cascade = [
     Deno.readFile(`${Deno.cwd()}/static/${pathname}`),
     Deno.readFile(`${Deno.cwd()}/static/${pathname}/index.html`),
-    fetch(`https://1998.social/${pathname}`)
+    /*fetch(`https://1998.social/${pathname}`)
       .then((res) => res.json())
-      .then(({file}) => {
-        if(!file) throw new Error();
+      .then((data) => {
+        if(!data || !data.file) throw new Error();
         if(extname(pathname) === '.json') return JSON.stringify(file);
         return file;
-      })
+      })*/
   ]
 
   for (const promise of cascade) {
