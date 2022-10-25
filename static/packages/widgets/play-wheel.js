@@ -1,6 +1,7 @@
 import { Color, tag } from "/deps.js"
 import * as Tone from "https://esm.sh/tone@next"
 import $user from "/packages/widgets/menu-user.js"
+import $guitar from "/packages/streams/guitar.js"
 
 const synths = [...new Array(24)].map(() =>
 	new Tone.FMSynth().toMaster()
@@ -53,6 +54,52 @@ function release (event) {
 	event.target.classList.remove('active')
 }
 
+const chords = [
+  [],
+  [0],
+  [1],
+  [2],
+  [3],
+  [4],
+  [0, 1, 16],
+]
+
+let activeSynths = []
+let playing = false
+let activeRegister = 0
+
+requestAnimationFrame(loop)
+function loop() {
+  const { activeRegisters, activeMotions } = $guitar.read()
+  activeRegisters.map((register, i) => {
+    if(!chords[register]) return
+    // if register changes, release and stop
+    if(register === 0) {
+      playing = false
+    }
+    const { up, down } = activeMotions[i]
+
+    const exitingSynths = activeSynths
+      .filter(x => !chords[register].includes(x))
+
+    exitingSynths.map(x => {
+      const synth = document.querySelector(`[data-synth='${x}']`)
+      synth && synth.dispatchEvent(new Event('touchend'))
+    })
+
+        // if up/down start attack of chords
+    if(up || down && register > 0) {
+      playing = true
+      activeSynths = chords[register]
+      activeSynths.map(x => {
+        const synth = document.querySelector(`[data-synth='${x}']`)
+        synth && synth.dispatchEvent(new Event('touchstart'))
+      })
+    }
+  })
+
+  requestAnimationFrame(loop)
+}
 
 $.write({ colors: recalculate() })
 $.render(() => {
