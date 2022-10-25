@@ -11,9 +11,10 @@ export const handler = async (_request, context) => {
     fetch(`https://1998.social/${pathname}`)
       .then((res) => res.json())
       .then((data) => {
+        console.log(data)
         if(!data || !data.file) throw new Error();
-        if(extname(pathname) === '.json') return JSON.stringify(file);
-        return file;
+        if(extname(pathname) === '.json') return JSON.stringify(data.file);
+        return data.file;
       })
   ]
 

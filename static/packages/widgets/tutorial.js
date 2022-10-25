@@ -22,7 +22,7 @@ $.on('click', '.start', () => {
 
 $.on('click', '.remix', async () => {
   const randomPath = randomString(128) + '.html'
-  const clientUrl = "https://sillyz.computer/tmp/" + randomPath
+  const clientUrl = "/tmp/" + randomPath
   const serverUrl = "https://1998.social/tmp/" + randomPath
 
   const href= "/packages/widgets/play-wheel.js"
