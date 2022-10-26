@@ -12,7 +12,7 @@ export const handler = async (_request, context) => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data)
-        if(!data || !data.file) throw new Error();
+        if(!data || !data.file) return 'did we expect that'
         if(extname(pathname) === '.json') return JSON.stringify(data.file);
         return data.file;
       })
@@ -24,7 +24,7 @@ export const handler = async (_request, context) => {
       console.log(file)
       return new Response(file, {
         headers: {
-          "Content-Type": typeByExtension(extname(pathname))
+          "Content-Type": typeByExtension(extname(pathname)) || 'text/html; charset=utf-8'
         }
       });
     } catch(_e) {
