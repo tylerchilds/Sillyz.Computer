@@ -8,8 +8,10 @@ export const handler = async (request, context) => {
       const b64moduleData = "data:text/javascript;base64," + btoa(data.func);
 
       const { handler } = await import(b64moduleData);
+      console.log(handler)
       return handler
     })
 
+  console.log(edgeHandler)
   return await edgeHandler(request, context)
 }
