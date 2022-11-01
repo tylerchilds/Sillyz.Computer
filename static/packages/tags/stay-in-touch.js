@@ -32,15 +32,12 @@ $.on('click', 'a', (event) => {
 
   showModal(`
     <h1>Human Connection</h1>
-    <br/>
     <p>
       Sillyz.Computer is an interactive art piece and medium (and LLC!), created and curated by <highlighter color="${color}">just one ${pronoun}</highlighter>. Staying in touch would be super appreciated.
     </p>
-    <br/>
     <p>
       If any of your experience was fun, I'd love to hear about it. Please leave your email and I will be in touch with updates!
     </p>
-    <br/>
 
 <div>
   <subscribe-email></subscribe-email>

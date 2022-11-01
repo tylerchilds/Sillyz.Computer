@@ -115,3 +115,9 @@ fetch('/enums/post-types')
   .then(enums =>
     bus.state['https://1998.social/enums/post-types'] = { enums }
   )
+
+fetch('/edge/sillyz-spec.js')
+  .then(x => x.text())
+  .then(func =>
+    bus.state['https://1998.social/edge/sillyz-spec.js'] = { func }
+  )

@@ -1,3 +1,5 @@
+@import url('./normalize.css');
+
 @font-face {
 	font-family: 'Sono';
 	src: url('/fonts/sono.ttf') format("truetype-variations");
@@ -144,9 +146,6 @@
 * {
 	text-rendering: geometricPrecision;
 	box-sizing: border-box;
-	border: 0;
-	margin: 0;
-	padding: 0;
 	transition: font-variation-settings 500ms ease-in-out;
 }
 
@@ -163,8 +162,8 @@ body {
 }
 
 body {
-	font-size: 1rem;
-	line-height: 1.3;
+	font-size: 1.2rem;
+	line-height: 1.5;
 	font-family: var(--font-body);
   position: relative;
 }
@@ -193,6 +192,12 @@ svg{
 	max-width: 100%;
 	vertical-align: top;
 }
+
+hr {
+  border: 1px solid rgba(0, 0, 0, .85);
+	width: 100%;
+}
+
 menu-resource {
   display: none;
   position: fixed;
@@ -505,9 +510,14 @@ menu-user {
   border-right: none;
 }
 
+/* just for now */
+.interface-button,
+chalect-bar {
+	display: none !important;
+}
+
 footer {
   display: grid;
-  display: none;
   grid-template-columns: auto 1fr auto;
   gap: 1rem;
   place-items: end center;
@@ -543,4 +553,20 @@ footer chalect-bar [name="filter"] {
   font-size: 1.5rem;
   padding: .5rem;
   background: rgba(255,255,255,.85);
+}
+
+.single-column {
+  display: grid;
+  grid-template-columns: 
+    [full-start] minmax(1em, 1fr) 
+    [main-start] minmax(0, 40em) [main-end]
+    minmax(1em, 1fr) [full-end];
+}
+
+.single-column > * {
+  grid-column: main ;
+}
+
+.single-column > .full-bleed {
+  grid-column: full;
 }
