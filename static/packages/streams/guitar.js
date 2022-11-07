@@ -13,37 +13,26 @@ const fretMap = [0, 1, 3, 2, 4]
 
 const registers = [
   "     ",
+
   "x    ",
-
-  " x   ",
-  "  x  ",
-  "   x ",
-  "    x",
-
-  "xx   ",
-  "x x  ",
-  "x  x ",
   "x   x",
 
-  "xxx  ",
-  "xx x ",
-  "xx  x",
-  "xxxx ",
-
-  "xxx x",
-  "xxxxx",
-  " xx  ",
-  " x x ",
-
+  " x   ",
   " x  x",
-  " xxx ",
-  " xx x",
-  " xxxx",
 
-  "  xx ",
+  "  x  ",
   "  x x",
-  "  xxx",
+
+  "   x ",
   "   xx",
+
+  "xx   ",
+  "xx  x",
+
+  " xx  ",
+  " xx x",
+  "x x x",
+  "xxxxx"
 ]
 
 requestAnimationFrame(loop)

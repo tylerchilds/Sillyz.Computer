@@ -16,6 +16,10 @@ const $ = tag('play-wheel', {
 	pitch: 0
 })
 
+const strumVelocity = 75
+const sustainedDuration = 100
+const actionableFPS = 4 
+
 const majorScale = [
   'C', 'G', 'D', 'A', 'E', 'B', 'F#', 'Db', 'Ab', 'Eb', 'Bb', 'F'
 ]
@@ -33,6 +37,28 @@ const lightnessStops = [
   [80, 105],
   [95, 120]
 ]
+
+const octaveUp = () => {
+	const octave = $.read().octave + 1
+	if(octave > 6) { return }
+	$.write({ octave })
+}
+
+const octaveDown = () => {
+	const octave = $.read().octave - 1
+	if(octave < 0) { return }
+	$.write({ octave })
+}
+
+const pitchUp = () => {
+	const pitch = $.read().pitch + 1
+	$.write({ pitch })
+}
+
+const pitchDown =() => {
+	const pitch = $.read().pitch - 1
+	$.write({ pitch })
+}
 
 function attack(event) {
 	event.preventDefault()
@@ -56,61 +82,98 @@ function release (event) {
 
 const chords = [
   [],
-  [6],
-  [7],
-  [8],
-  [9],
-  [10],
-  [11],
-  [0],
-  [1],
-  [5],
-  [0, 1, 4],
-  [1, 2, 5],
-  [2, 3, 6],
-  [0, 1, 4, 5, 8],
-  [1, 2, 5, 6, 9],
-  [2, 3, 6, 7, 10],
-  [2],
-  [3],
-  [4],
+
+  [0, 4, 1], // c major: c - e - g
+  [0, 9, 1], // c minor: c - eb - g
+
+  [1, 5, 2], // g major: g - b - d
+  [1, 10, 2], // g minor: g - bb - d
+
+  [2, 6, 3], // d major: d - f# - a
+  [2, 11, 3], // d minor: d - f - a
+
+  [4, 8, 5], // e major: e - g# - b
+  [4, 2, 5], // e minor: e - g - b
+
+  [3, 9, 4], // a major: a - c# - e
+  [3, 0, 4], // a minor: a - c - e
+
+  [11, 3, 0], // f major: f - a - c
+  [11, 8, 0], // f minor: f - ab - c
+  
+  [],// octave picker
+  [] // pitch picker
 ]
 
 let activeSynths = []
-let playing = false
 let activeRegister = 0
 
 requestAnimationFrame(loop)
-function loop() {
-  const { activeRegisters, activeMotions } = $guitar.read()
+function loop(time) {
+  const { activeRegisters, activeFrets, activeMotions } = $guitar.read()
   activeRegisters.map((register, i) => {
-    if(!chords[register]) return
-    // if register changes, release and stop
-    if(register === 0) {
-      playing = false
-    }
     const { up, down } = activeMotions[i]
-
-    const exitingSynths = activeSynths
-      .filter(x => !chords[register].includes(x))
-
-    exitingSynths.map(x => {
-      const synth = document.querySelector(`[data-synth='${x}']`)
-      synth && synth.dispatchEvent(new Event('touchend'))
-    })
-
-        // if up/down start attack of chords
-    if(up || down && register > 0) {
-      playing = true
-      activeSynths = chords[register]
-      activeSynths.map(x => {
-        const synth = document.querySelector(`[data-synth='${x}']`)
-        synth && synth.dispatchEvent(new Event('touchstart'))
+    if(activeFrets[i] === 'x x x') {
+      [[up, octaveUp], [down, octaveDown]].map(([flag, feature]) => {
+        flag && throttle({ key: 'octave-shift', time, feature })
       })
     }
+    if(activeFrets[i] === 'xxxxx') {
+      [[up, pitchUp], [down, pitchDown]].map(([flag, feature]) => {
+        flag && throttle({ key: 'pitch-shift', time, feature })
+      })
+    }
+    if(!chords[register]) return
+
+    const feature = () => {
+      // if up/down start attack of chords
+      if(up || down && register > 0) {
+        activeSynths = chords[register]
+        activeSynths.map((x, i) => {
+          const index = down ? x : activeSynths[activeSynths.length - 1 - i]
+          const synth = document.querySelector(`[data-synth='${index}']`)
+          synth && queueAttack(synth, i)
+        })
+      }
+    }
+
+    feature()
   })
 
   requestAnimationFrame(loop)
+}
+
+function throttle({ key, time, feature }) {
+  const { frames = {}} = $.read()
+  const frame = frames[key] || {}
+
+  if((time - 1000 / actionableFPS) > (frame.time || 0)) {
+    feature()
+    $.write({ time }, (state, payload) => {
+      return {
+        ...state,
+        frames: {
+          ...frames,
+          [key]: {
+            time: payload.time
+          }
+        }
+      }
+    })
+  }
+}
+
+function queueRelease(synth) {
+  setTimeout(() => {
+    synth.dispatchEvent(new Event('touchend'))
+  }, sustainedDuration)
+}
+
+function queueAttack(synth, i) {
+  setTimeout(() => {
+    synth.dispatchEvent(new Event('touchstart'))
+    queueRelease(synth)
+  }, i * strumVelocity)
 }
 
 $.write({ colors: recalculate() })
@@ -215,27 +278,10 @@ function controls() {
 	`
 }
 
-$.on('click', '.octave-up', () => {
-	const octave = $.read().octave + 1
-	if(octave > 6) { return }
-	$.write({ octave })
-})
-
-$.on('click', '.octave-down', () => {
-	const octave = $.read().octave - 1
-	if(octave < 0) { return }
-	$.write({ octave })
-})
-
-$.on('click', '.pitch-up', () => {
-	const pitch = $.read().pitch + 1
-	$.write({ pitch })
-})
-
-$.on('click', '.pitch-down', () => {
-	const pitch = $.read().pitch - 1
-	$.write({ pitch })
-})
+$.on('click', '.octave-up', octaveUp)
+$.on('click', '.octave-down', octaveDown)
+$.on('click', '.pitch-up', pitchUp)
+$.on('click', '.pitch-down', pitchDown)
 
 $.style(`
   & {
