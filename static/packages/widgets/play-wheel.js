@@ -4,7 +4,9 @@ import $user from "/packages/widgets/menu-user.js"
 import $guitar from "/packages/streams/guitar.js"
 
 const synths = [...new Array(24)].map(() =>
-	new Tone.FMSynth().toMaster()
+	new Tone.Sampler({
+    urls: { C4: '/sounds/1.mp3' }
+  }).toDestination()
 )
 
 const $ = tag('play-wheel', {
@@ -16,9 +18,9 @@ const $ = tag('play-wheel', {
 	pitch: 0
 })
 
-const strumVelocity = 75
-const sustainedDuration = 100
-const actionableFPS = 4 
+const strumVelocity = 50
+const sustainedDuration = 25
+const actionableFPS = 8
 
 const majorScale = [
   'C', 'G', 'D', 'A', 'E', 'B', 'F#', 'Db', 'Ab', 'Eb', 'Bb', 'F'
@@ -64,7 +66,7 @@ function attack(event) {
 	event.preventDefault()
 	const { colors } = $.read()
   const { note, octave, synth, hue } = event.target.dataset
-  synths[synth].triggerAttack(`${note}${octave}`, "2n");
+  synths[synth].triggerAttackRelease(`${note}${octave}`, "2n");
 	event.target.classList.add('active')
 
   document.querySelector('html').style.setProperty(
@@ -75,8 +77,8 @@ function attack(event) {
 
 function release (event) {
 	event.preventDefault()
-  const { synth } = event.target.dataset
-  synths[synth].triggerRelease();
+  //const { synth } = event.target.dataset
+  //synths[synth].triggerRelease();
 	event.target.classList.remove('active')
 }
 
@@ -95,7 +97,7 @@ const chords = [
   [4, 8, 5], // e major: e - g# - b
   [4, 2, 5], // e minor: e - g - b
 
-  [3, 9, 4], // a major: a - c# - e
+  [3, 7, 4], // a major: a - c# - e
   [3, 0, 4], // a minor: a - c - e
 
   [11, 3, 0], // f major: f - a - c
