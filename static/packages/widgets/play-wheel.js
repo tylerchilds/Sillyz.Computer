@@ -3,6 +3,8 @@ import * as Tone from "https://esm.sh/tone@next"
 import $user from "/packages/widgets/menu-user.js"
 import $guitar from "/packages/streams/guitar.js"
 
+bus.state['https://1998.social/last-color.json']
+
 const synths = [...new Array(24)].map(() =>
 	new Tone.Sampler({
     urls: { C4: '/sounds/1.mp3' }
@@ -69,10 +71,15 @@ function attack(event) {
   synths[synth].triggerAttackRelease(`${note}${octave}`, "2n");
 	event.target.classList.add('active')
 
+  const lastColor = new Color(
+    colors[parseInt(hue)][parseInt(octave)].value
+  ).toString({format: "hex"})
   document.querySelector('html').style.setProperty(
 		"--theme",
-		`var(${colors[parseInt(hue)][parseInt(octave)].name})`
+		`${lastColor}`
 	)
+
+  bus.state['https://1998.social/last-color.json'].color = lastColor
 }
 
 function release (event) {
